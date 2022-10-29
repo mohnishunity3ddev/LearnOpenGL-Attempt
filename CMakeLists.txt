@@ -61,3 +61,4 @@ set_property(TARGET assimp          PROPERTY FOLDER "ThirdPartyLibraries")
 
 add_subdirectory(src/Chapter01/01.getting.started)
 add_subdirectory(src/Chapter01/01.1.getting.started.hello.window)
+add_subdirectory(src/Chapter01/01.2.hello.triangle)

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22.0)
 
-project(IntroductionToParallelProgramming CXX C)
+project(LearnOpenGL-Attempt CXX C)
 
 set(EXTERN_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
@@ -11,6 +11,9 @@ set(CMAKE_CXX_EXTENSIONS ON)
 if(WIN32)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
+
+# Find OpenGL
+find_package(OpenGL REQUIRED)
 
 # GLFW Stuff
 set(GLFW_BUILD_EXAMPLES     OFF CACHE BOOL "")
@@ -42,7 +45,7 @@ set(GLAD_SOURCES external/glad/src/glad.c)
 add_library(glad ${GLAD_SOURCES})
 
 # Include Directories ...
-include_directories(external/glfw)
+include_directories(external/glfw/include)
 include_directories(external/glm)
 include_directories(external/glad/include)
 include_directories(external/stb)
@@ -52,8 +55,9 @@ if(WIN32)
     set_property(TARGET zlibstatic    PROPERTY FOLDER "ThirdPartyLibraries")
 endif()
 set_property(TARGET glfw            PROPERTY FOLDER "ThirdPartyLibraries")
-# set_property(TARGET glad            PROPERTY FOLDER "ThirdPartyLibraries")
+set_property(TARGET glad            PROPERTY FOLDER "ThirdPartyLibraries")
 set_property(TARGET assimp          PROPERTY FOLDER "ThirdPartyLibraries")
 
 
 add_subdirectory(src/Chapter01/01.getting.started)
+add_subdirectory(src/Chapter01/01.1.getting.started.hello.window)

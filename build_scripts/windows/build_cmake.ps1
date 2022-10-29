@@ -30,9 +30,9 @@ if($t1 -eq $cwd) {
 # build using cmake
 Set-Location $BIN_DIR_PATH
 if(!$is_release) {
-    cmake -S $PROJECT_ROOT_DIR_PATH -B . -GNinja
+    cmake  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -S $PROJECT_ROOT_DIR_PATH -B . -GNinja
 } else {
-    cmake -DCMAKE_BUILD_TYPE=Release -S $PROJECT_ROOT_DIR_PATH -B . -GNinja
+    cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -S $PROJECT_ROOT_DIR_PATH -B . -GNinja
 }
 
 # Build cmake files with Ninja

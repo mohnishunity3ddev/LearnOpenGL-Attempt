@@ -4,4 +4,4 @@ project(01.getting.started)
 
 include(../../../cmake_macros/prac.cmake)
 
-SETUP_APP(01.getting.started "Chapter01")
+SETUP_APP(01.getting.started "Chapter01" glfw glad)

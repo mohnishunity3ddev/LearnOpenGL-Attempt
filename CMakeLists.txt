@@ -38,11 +38,8 @@ add_subdirectory(external/assimp)
 # endif ()
 
 # GLAD Stuff
-# set(GLAD_SOURCES external/glad/src/gl.c external/glad/src/vulkan.c)
-# if(WIN32)
-# 	set(GLAD_SOURCES ${GLAD_SOURCES} external/glad/src/wgl.c)
-# endif()
-# add_library(glad ${GLAD_SOURCES})
+set(GLAD_SOURCES external/glad/src/glad.c)
+add_library(glad ${GLAD_SOURCES})
 
 # Include Directories ...
 include_directories(external/glfw)

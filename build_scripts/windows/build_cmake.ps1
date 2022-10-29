@@ -34,6 +34,8 @@ if(!$is_release) {
 } else {
     cmake -DCMAKE_BUILD_TYPE=Release -S $PROJECT_ROOT_DIR_PATH -B . -GNinja
 }
+
+# Build cmake files with Ninja
 ninja
 
 # only go to previous PWD if the previous PWD was not the bin directory

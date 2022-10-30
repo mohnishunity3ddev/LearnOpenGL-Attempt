@@ -8,8 +8,13 @@ set(CMAKE_CXX_STANDARD 17) # this does nothing for MSVC, use target_compile_opti
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
+# Definitions
 if(WIN32)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+option(USE_DEBUG "Enter debug mode" OFF)
+if (USE_DEBUG)
+  add_definitions(-DDEBUG)
 endif()
 
 # Find OpenGL
@@ -67,3 +72,5 @@ add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise01)
 add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise02)
 
 add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise03)
+
+add_subdirectory(src/Chapter01/01.2.hello.triangle_debug_output)

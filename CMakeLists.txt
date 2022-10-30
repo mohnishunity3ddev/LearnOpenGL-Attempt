@@ -55,6 +55,7 @@ include_directories(external/glm)
 include_directories(external/glad/include)
 include_directories(external/stb)
 include_directories(external/assimp/include)
+include_directories(common)
 
 if(WIN32)
     set_property(TARGET zlibstatic    PROPERTY FOLDER "ThirdPartyLibraries")
@@ -63,14 +64,15 @@ set_property(TARGET glfw            PROPERTY FOLDER "ThirdPartyLibraries")
 set_property(TARGET glad            PROPERTY FOLDER "ThirdPartyLibraries")
 set_property(TARGET assimp          PROPERTY FOLDER "ThirdPartyLibraries")
 
+# Include Common SharedUtils
+add_subdirectory(common)
+
 
 add_subdirectory(src/Chapter01/01.getting.started)
 add_subdirectory(src/Chapter01/01.1.getting.started.hello.window)
 add_subdirectory(src/Chapter01/01.2.hello.triangle)
 add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise01)
-
 add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise02)
-
 add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise03)
-
 add_subdirectory(src/Chapter01/01.2.hello.triangle_debug_output)
+add_subdirectory(src/Chapter01/01.3.shaders)

@@ -9,3 +9,4 @@ Write-Output "Pushing all local changes to git..."
 goto root
 git add .
 git commit -m "$commit_msg"
+git push

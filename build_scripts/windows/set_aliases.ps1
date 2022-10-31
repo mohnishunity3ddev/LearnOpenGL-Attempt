@@ -11,7 +11,8 @@ Set-Alias -Name goto        -Value "undefined"
 Set-Alias -Name run         -Value "undefined"
 Set-Alias -Name opt         -Value "undefined"
 Set-Alias -Name prof        -Value "undefined"
-Set-Alias -Name create        -Value "undefined"
+Set-Alias -Name create      -Value "undefined"
+Set-Alias -Name push        -Value "undefined"
 
 if(Test-Path alias:rebuild*) {
     Remove-Alias rebuild
@@ -52,6 +53,9 @@ if(Test-Path alias:ms*) {
 if(Test-Path alias:create*) {
     Remove-Alias create
 }
+if(Test-Path alias:push*) {
+    Remove-Alias push
+}
 
 Set-Alias -Name rebuild -Value $PSScriptRoot\rebuild.ps1 -Scope Global
 Set-Alias -Name rb -Value $PSScriptRoot\rebuild.ps1 -Scope Global
@@ -68,8 +72,6 @@ Set-Alias -Name goto -Value $PSScriptRoot\goto.ps1 -Scope Global
 Set-Alias -Name run -Value $PSScriptRoot\run_project.ps1 -Scope Global
 Set-Alias -Name create -Value $PSScriptRoot\create_project.ps1 -Scope Global
 
-Set-Alias -Name opt -Value $PSScriptRoot\run_optick_profiler.ps1 -Scope Global
+Set-Alias -Name push -Value $PSScriptRoot\git_push.ps1 -Scope Global
 
-Set-Alias -Name prof -Value $PROJECT_ROOT_DIR_PATH\external\easy_profiler_precompiled\bin\profiler_gui.exe -Scope Global
-
-Write-Yellow "All Command Aliases are set. You can use build/rebuild/msvc/clean/goto/run/create ..."
+Write-Yellow "All Command Aliases are set. You can use build/rebuild/msvc/clean/goto/run/create/push ..."

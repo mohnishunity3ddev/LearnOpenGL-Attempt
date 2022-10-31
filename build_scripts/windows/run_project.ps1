@@ -36,6 +36,7 @@ foreach($Chapter in $Chapters)
                     Set-Location $SubFolderBuildPath
                     $exe = Get-ChildItem $SubFolderBuildPath -Recurse -Include *.exe
                     Invoke-Expression "& `"$exe`""
+                    return
                 } else {
                     Write-Error "No bin folder present in $SubFolderBuildPath"
                 }

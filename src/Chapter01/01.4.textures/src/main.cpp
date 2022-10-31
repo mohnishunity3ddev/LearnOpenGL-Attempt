@@ -28,10 +28,6 @@ unsigned int indices[] = {
     1, 2, 3     // second triangle
 };
 
-void getTexture(Texture* texture) {
-
-}
-
 void APIENTRY glDebugOutput(GLenum source, 
                             GLenum type, 
                             unsigned int id, 

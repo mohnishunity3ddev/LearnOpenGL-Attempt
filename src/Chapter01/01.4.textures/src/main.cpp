@@ -16,14 +16,21 @@ const unsigned int SCR_HEIGHT = 600;
 bool wireframeMode = false;
 
 float vertices[] = {
-     0.0f,  0.5f, 0.0f,     1.0f, 0.0f, 0.0f,   // top right
-     0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f,   // bottom right
-    -0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f    // bottom left
+    // positions          // colors           // texture coords
+     0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+     0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 };
 
 unsigned int indices[] = {
-    0, 1, 2,    // first triangle
+    0, 1, 3,    // first triangle
+    1, 2, 3     // second triangle
 };
+
+void getTexture(Texture* texture) {
+
+}
 
 void APIENTRY glDebugOutput(GLenum source, 
                             GLenum type, 
@@ -117,8 +124,9 @@ int main()
 
     // Our Vertex and Fragment Shaders.
     Shader shader("../shaders/01.4.textures.vert", "../shaders/01.4.textures.frag");
-    Texture texture("wall.jpg");
-
+    Texture containerTexture("container.jpg", GL_TEXTURE_2D, true, GL_RGB, GL_RGB, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
+    Texture awesomeFaceTexture("awesomeface.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
+    
     // Vertex Data
     unsigned int VBO, VAO;
     glGenBuffers(1, &VBO);
@@ -137,12 +145,20 @@ int main()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     
     // Vertex Position Attribute.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // Vertex Color Attribute.
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // Texture Coordinate Attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    shader.use();
+    shader.setInt("texture1", 0);
+    shader.setInt("texture2", 1);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -152,16 +168,14 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.use();
+        // Now this texture gets bound to "texture1" sampler2D used inside the shader since "texture1" is bound to texture-unit 0.
+        containerTexture.bindToTextureUnit(0); 
+        // Now this texture gets bound to "texture2" sampler2D used inside the shader since "texture2" is bound to texture-unit 1.
+        awesomeFaceTexture.bindToTextureUnit(1); 
 
-        // Update color in the fragment Shader.
-        float timeValue = glfwGetTime();
-        float colorChangeSpeed = 3.0f;
-        float colorComponent = std::sin(timeValue * colorChangeSpeed) * 0.5f + 0.5f;
-        shader.setTestColor("uniformColor", colorComponent);
-
-        glBindVertexArray(VAO);
+        glBindVertexArray(VAO); 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0); // The last argument here is the offset to the first vertex index in the elements buffer EBO. 
+        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(indices[0]), GL_UNSIGNED_INT, 0); // The last argument here is the offset to the first vertex index in the elements buffer EBO. 
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);

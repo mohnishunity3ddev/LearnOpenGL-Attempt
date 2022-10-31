@@ -1,0 +1,4 @@
+#pragma once
+
+const char* project_path = "@CMAKE_SOURCE_DIR@/";
+const char* texture_dir_path = "@CMAKE_SOURCE_DIR@/textures/";

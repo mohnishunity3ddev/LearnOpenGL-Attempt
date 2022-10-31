@@ -4,7 +4,7 @@ project(LearnOpenGL-Attempt CXX C)
 
 set(EXTERN_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
-set(CMAKE_CXX_STANDARD 17) # this does nothing for MSVC, use target_compile_options below
+set(CMAKE_CXX_STANDARD 20) # this does nothing for MSVC, use target_compile_options below
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
@@ -79,3 +79,5 @@ add_subdirectory(src/Chapter01/01.3.shaders)
 add_subdirectory(src/Chapter01/01.3.shaders_exercise01)
 add_subdirectory(src/Chapter01/01.3.shaders_exercise02)
 add_subdirectory(src/Chapter01/01.3.shaders_exercise03)
+
+add_subdirectory(src/Chapter01/01.4.textures)

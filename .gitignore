@@ -1,2 +1,3 @@
 bin
 .vscode
+common/project_paths.h

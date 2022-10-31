@@ -76,3 +76,8 @@ add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise02)
 add_subdirectory(src/Chapter01/01.2.hello.triangle_exercise03)
 add_subdirectory(src/Chapter01/01.2.hello.triangle_debug_output)
 add_subdirectory(src/Chapter01/01.3.shaders)
+add_subdirectory(src/Chapter01/01.3.shaders_exercise01)
+
+add_subdirectory(src/Chapter01/01.3.shaders_exercise02)
+
+add_subdirectory(src/Chapter01/01.3.shaders_exercise03)

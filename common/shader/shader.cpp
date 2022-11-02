@@ -110,3 +110,7 @@ void Shader::setFloat(const std::string& name, float value) const {
 void Shader::setTestColor(const std::string& name, float value) const {
     glUniform4f(glGetUniformLocation(ID, name.c_str()), value, value, value, value);
 }
+
+void Shader::setMat4f(const std::string& name, int count, bool isTranspose, const float* value) const {
+    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), count, isTranspose, value);
+}

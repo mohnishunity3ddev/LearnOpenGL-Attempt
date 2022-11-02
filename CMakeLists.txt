@@ -82,7 +82,6 @@ add_subdirectory(src/Chapter01/01.3.shaders_exercise03)
 add_subdirectory(src/Chapter01/01.4.textures)
 add_subdirectory(src/Chapter01/01.4.textures_exercise01)
 add_subdirectory(src/Chapter01/01.4.textures_exercise02)
-
 add_subdirectory(src/Chapter01/01.4.textures_exercise03)
-
 add_subdirectory(src/Chapter01/01.4.textures_exercise04)
+add_subdirectory(src/Chapter01/01.5.transformations)

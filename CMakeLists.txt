@@ -91,13 +91,11 @@ add_subdirectory(src/Chapter01/01.5.transformations_exercise01)
 add_subdirectory(src/Chapter01/01.5.transformations_exercise02)
 add_subdirectory(src/Chapter01/01.6.coordinate_systems)
 add_subdirectory(src/Chapter01/01.6.coordinate_systems_exercise01)
-
 add_subdirectory(src/Chapter01/01.6.coordinate_systems_exercise02)
-
 add_subdirectory(src/Chapter01/01.6.coordinate_systems_exercise03)
-
 add_subdirectory(src/Chapter01/01.7.camera)
-
 add_subdirectory(src/Chapter01/01.7.camera_exercise01)
-
 add_subdirectory(src/Chapter01/01.7.camera_exercise02)
+
+
+add_subdirectory(src/Chapter02/02.1.Colors)

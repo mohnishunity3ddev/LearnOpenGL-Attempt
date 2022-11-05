@@ -11,6 +11,7 @@ set(CMAKE_CXX_EXTENSIONS ON)
 # Definitions
 if(WIN32)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-DWIN32_LEAN_AND_MEAN)
 endif()
 option(USE_DEBUG "Enter debug mode" OFF)
 if (USE_DEBUG)
@@ -66,6 +67,7 @@ set_property(TARGET assimp          PROPERTY FOLDER "ThirdPartyLibraries")
 
 # Include Common SharedUtils
 add_subdirectory(common)
+# set_property(TARGET SharedUtils     PROPERTY FOLDER "ThirdPartyLibraries")
 
 
 add_subdirectory(src/Chapter01/01.getting.started)

@@ -95,3 +95,7 @@ add_subdirectory(src/Chapter01/01.6.coordinate_systems_exercise02)
 add_subdirectory(src/Chapter01/01.6.coordinate_systems_exercise03)
 
 add_subdirectory(src/Chapter01/01.7.camera)
+
+add_subdirectory(src/Chapter01/01.7.camera_exercise01)
+
+add_subdirectory(src/Chapter01/01.7.camera_exercise02)

@@ -1,0 +1,76 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(Windows) Launch Generic Debug",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${fileDirname}/../bin/${fileBasenameNoExtension}_Debug.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "(Windows) Launch Generic Release",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${fileDirname}/../bin/${fileBasenameNoExtension}_Release.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Project 1.3",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/Chapter01/01.3.shaders/bin/01.3.shaders_Debug.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src/Chapter01/01.3.shaders/bin",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Project 1.4 Main",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/Chapter01/01.4.textures/bin/01.4.textures_Debug.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src/Chapter01/01.4.textures/bin",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Project 1.7 Camera",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/Chapter01/01.7.camera_exercise02/bin/01.7.camera_exercise02_Debug.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src/Chapter01/01.7.camera_exercise02/bin",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Debug Output",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/Chapter01/01.2.hello.triangle_debug_output/bin/01.2.hello.triangle_debug_output_Debug.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src/Chapter01/01.2.hello.triangle_debug_output/bin",
+            "environment": [],
+            "console": "integratedTerminal"
+        },
+
+
+    ]
+}

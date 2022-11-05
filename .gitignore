@@ -1,3 +1,4 @@
 bin
-.vscode
+.vscode/*
+!.vscode/launch.json
 common/project_paths.h

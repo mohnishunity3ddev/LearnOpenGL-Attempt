@@ -5,10 +5,15 @@
 #include <camera/camera.h>
 
 #include <iostream>
+#include <random>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#define JARRAY_SIZE(arr) sizeof(arr) / sizeof(arr[0])
+#define RAND_0_1 (float)rand() / (float)RAND_MAX
+#define RAND_COLOR glm::vec3(RAND_0_1, RAND_0_1, RAND_0_1)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -27,6 +32,8 @@ glm::vec3 cubePositions[] = {
     glm::vec3( 1.5f,  0.2f, -1.5f), 
     glm::vec3(-1.3f,  1.0f, -1.5f)  
 };
+
+glm::vec3 cubeColors[JARRAY_SIZE(cubePositions)];
 
 float cubeVertices[] = {
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -85,6 +92,13 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
+
+// colors
+glm::vec3 color = glm::vec3(1.);
+
+// Light
+glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 0.0f);
+glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, -5.0f);
 
 void APIENTRY glDebugOutput(GLenum source, 
                             GLenum type, 
@@ -176,8 +190,17 @@ int main() {
                       0, nullptr, GL_TRUE); 
     }
 
+    // Initialize Cube Colors
+    std::cout << "Cube Colors size: " << JARRAY_SIZE(cubeColors) << "\n";
+    const uint32_t cubeColorSize = JARRAY_SIZE(cubeColors);
+    for(uint32_t i = 0; i < cubeColorSize; ++i) {
+        cubeColors[i] = RAND_COLOR;
+        std::cout << "Cube Color [" << i << "]: (" << cubeColors[i].x << ", " << cubeColors[i].y << ", " << cubeColors[i].z << "). \n";
+    }
+
     // Our Vertex and Fragment Shaders.
     Shader shader("../shaders/02.1.colors.vert", "../shaders/02.1.colors.frag");
+    Shader lightingShader("../shaders/lighting_shader.vert", "../shaders/lighting_shader.frag");
     Texture containerTexture("container.jpg", GL_TEXTURE_2D, true, GL_RGB, GL_RGB, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
     Texture awesomeFaceTexture("awesomeface.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
     
@@ -198,6 +221,20 @@ int main() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    unsigned int lightingVAO;
+    glGenVertexArrays(1, &lightingVAO);
+
+    glBindVertexArray(lightingVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0 );
+    glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
+
+    lightingShader.use();
+    lightingShader.setVec3("objectColor", &color[0]);
+    lightingShader.setVec3("lightColor", &lightColor[0]);
+
     shader.use();
     shader.setInt("texture1", 0);
     shader.setInt("texture2", 1);
@@ -217,16 +254,26 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glm::mat4 view = camera.getViewMatrix();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+        lightingShader.use();
+        glBindVertexArray(lightingVAO);
+
+        glm::mat4 lightModel = glm::translate(identity, lightPosition);
+        lightingShader.setMat4f("View", 1, false, glm::value_ptr(view));
+        lightingShader.setMat4f("Projection", 1, false, glm::value_ptr(projection));
+        lightingShader.setMat4f("Model", 1, false, glm::value_ptr(lightModel));
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
         shader.use();
         // Now this texture gets bound to "texture1" sampler2D used inside the shader since "texture1" is bound to texture-unit 0.
         containerTexture.bindToTextureUnit(0); 
         // Now this texture gets bound to "texture2" sampler2D used inside the shader since "texture2" is bound to texture-unit 1.
         awesomeFaceTexture.bindToTextureUnit(1); 
         
-        glm::mat4 view = camera.getViewMatrix();
         shader.setMat4f("view", 1, GL_FALSE, glm::value_ptr(view));
-        
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         shader.setMat4f("projection", 1, GL_FALSE, glm::value_ptr(projection));
 
         glBindVertexArray(VAO); 
@@ -234,6 +281,8 @@ int main() {
             glm::mat4 model = glm::translate(identity, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            shader.setVec3("objectColor", glm::value_ptr( cubeColors[i] ));
+            shader.setVec3("lightColor", glm::value_ptr( lightColor ));
             shader.setMat4f("model", 1, GL_FALSE, glm::value_ptr(model));
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }

@@ -16,7 +16,7 @@ Set-Location .\$projNameArg
 
 mkdir bin
 mkdir src
-touch .\src\main.cpp
+touch .\src\$projNameArg.cpp
 touch CMakeLists.txt
 
 $chapterNumber = ""
@@ -38,3 +38,5 @@ if($null -ne $chapterNumberArg) {
     }
     Move-Item .\$projNameArg $projectPath
 }
+
+Add-Content -Path $PROJECT_ROOT_DIR_PATH\.vscode\launch.json

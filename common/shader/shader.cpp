@@ -53,7 +53,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     if(!success) {
         memset(infoLog, 0, 512);
         glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        std::cout << "Vertex Shader Compile Error: " << infoLog << "\n";
+        std::cout << "Vertex Shader Compile Error: " << infoLog << " in vertex shader: " << vertexPath << "\n";
         return;
     }
 
@@ -65,7 +65,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     if(!success) {
         memset(infoLog, 0, 512);
         glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-        std::cout << "Fragment Shader Compile Error: " << infoLog << "\n";
+        std::cout << "Fragment Shader Compile Error: " << infoLog << " in fragment shader: " << fragmentPath << "\n";
         return;
     }
 
@@ -114,4 +114,9 @@ void Shader::setTestColor(const std::string& name, float value) const {
 void Shader::setMat4f(const std::string& name, int count, bool isTranspose, const float* value) const {
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), count, isTranspose, value);
 }
+
+void Shader::setVec3 (const std::string &name, const float *value) const {
+    glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, value);
+}
+
 

@@ -99,3 +99,4 @@ add_subdirectory(src/Chapter01/01.7.camera_exercise02)
 
 add_subdirectory(src/Chapter02/02.1.Colors)
 add_subdirectory(src/Chapter02/02.2.Basic.Lighting)
+add_subdirectory(src/Chapter02/02.2.Basic.Lighting_exercise03)

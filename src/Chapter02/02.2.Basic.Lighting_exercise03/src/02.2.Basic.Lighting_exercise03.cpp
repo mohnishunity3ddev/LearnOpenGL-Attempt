@@ -80,8 +80,8 @@ float cubeVertices[] = {
 };
 
 // settings
-const unsigned int SCR_WIDTH = 2560;
-const unsigned int SCR_HEIGHT = 1440;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -94,7 +94,8 @@ float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
 // Light
-glm::vec3 yellowColor = glm::vec3(1.0f, 1.0f, 0.0f);
+glm::vec3 yellowColor   = glm::vec3(1.0f, 1.0f,  0.0f);
+glm::vec3 redColor      = glm::vec3(1.0f, 0.0f,  0.0f);
 glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, -5.0f);
 
 void APIENTRY glDebugOutput(GLenum source, 
@@ -194,7 +195,7 @@ int main() {
     }
 
     // Our Vertex and Fragment Shaders.
-    Shader objectShader("../shaders/02.2.basic_lighting.vert", "../shaders/02.2.basic_lighting.frag");
+    Shader objectShader("../shaders/02.2.basic_lighting_exercise03.vert", "../shaders/02.2.basic_lighting_exercise03.frag");
     Shader lightShader("../shaders/light_shader.vert", "../shaders/light_shader.frag");
     // Texture containerTexture("container.jpg", GL_TEXTURE_2D, true, GL_RGB, GL_RGB, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
     // Texture awesomeFaceTexture("awesomeface.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
@@ -226,8 +227,6 @@ int main() {
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
-    lightShader.use();
-    lightShader.setVec3("lightColor", &yellowColor[0]);
 
     objectShader.use();
     objectShader.setVec3("lightColor", glm::value_ptr( yellowColor ));
@@ -252,31 +251,23 @@ int main() {
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-        // Oscillate light in a circle of radius 15 centered at 0.0
-        angle += deltaTime * lightMoveSpeed;
-        float circleRadius = 8.0f;
-        glm::vec3 circleCenter = glm::vec3(0.0f, 0.0f, -6.0f);
-        float lightXPos = cos(glm::radians(angle)) * circleRadius;
-        float lightZPos = sin(glm::radians(angle)) * circleRadius;
-        lightPosition.x = lightXPos; lightPosition.z = lightZPos;
-        lightPosition += circleCenter;
 
-        lightShader.use();
         glBindVertexArray(lightingVAO);
-
-        glm::mat4 lightModel = glm::translate(identity, lightPosition);
-        lightModel = glm::scale(lightModel, glm::vec3(0.25f));
+        lightShader.use();
         lightShader.setMat4f("View", 1, false, glm::value_ptr(view));
         lightShader.setMat4f("Projection", 1, false, glm::value_ptr(projection));
+        
+        // 1st light
+        lightShader.setVec3("lightColor", &yellowColor[0]);
+        glm::mat4 lightModel = glm::translate(identity, lightPosition);
+        lightModel = glm::scale(lightModel, glm::vec3(0.25f));
         lightShader.setMat4f("Model", 1, false, glm::value_ptr(lightModel));
-
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         objectShader.use();
         objectShader.setMat4f("view", 1, GL_FALSE, glm::value_ptr(view));
         objectShader.setMat4f("projection", 1, GL_FALSE, glm::value_ptr(projection));
         objectShader.setVec3("lightWorldPos", glm::value_ptr(lightPosition));
-        objectShader.setVec3("viewPos", &camera.Position[0]);
         
         glBindVertexArray(VAO); 
         for(int i = 0; i < cubeCount; ++i) {

@@ -95,7 +95,10 @@ float lastFrame = 0.0f;
 
 // Light
 glm::vec3 yellowColor = glm::vec3(1.0f, 1.0f, 0.0f);
+glm::vec3 whiteColor = glm::vec3(1.0f);
+glm::vec3 lightColor = glm::vec3(0.5f);
 glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, -5.0f);
+
 
 void APIENTRY glDebugOutput(GLenum source, 
                             GLenum type, 
@@ -226,12 +229,6 @@ int main() {
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
-    lightShader.use();
-    lightShader.setVec3("lightColor", &yellowColor[0]);
-
-    objectShader.use();
-    objectShader.setVec3("lightColor", glm::value_ptr( yellowColor ));
-
     glm::mat4 identity = glm::mat4(1.0f);
 
     glEnable(GL_DEPTH_TEST);
@@ -246,7 +243,7 @@ int main() {
 
         processInput(window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0, 0, 0, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 view = camera.getViewMatrix();
@@ -261,7 +258,18 @@ int main() {
         // lightPosition.x = lightXPos; lightPosition.z = lightZPos;
         // lightPosition += circleCenter;
 
+        // Changing Light color
+        glm::vec3 _lightColor;
+        _lightColor.x = sin(currentFrame * 0.2f);
+        _lightColor.y = sin(currentFrame * 0.7f);
+        _lightColor.z = sin(currentFrame * 1.3f);
+        
+        glm::vec3 _lightDiffuseColor = _lightColor * glm::vec3(0.5f);
+        glm::vec3 _lightAmbientColor = _lightDiffuseColor * glm::vec3(0.2f);
+
+
         lightShader.use();
+        lightShader.setVec3("lightColor", &_lightDiffuseColor[0]);
         glBindVertexArray(lightingVAO);
 
         glm::mat4 lightModel = glm::translate(identity, lightPosition);
@@ -275,15 +283,22 @@ int main() {
         objectShader.use();
         objectShader.setMat4f("view", 1, GL_FALSE, glm::value_ptr(view));
         objectShader.setMat4f("projection", 1, GL_FALSE, glm::value_ptr(projection));
-        objectShader.setVec3("lightWorldPos", glm::value_ptr(lightPosition));
         objectShader.setVec3("viewPos", &camera.Position[0]);
+        objectShader.setVec3("light.position", glm::value_ptr(lightPosition));
+        objectShader.setVec3("light.ambient",  glm::value_ptr(_lightAmbientColor));
+        objectShader.setVec3("light.diffuse",  glm::value_ptr(_lightDiffuseColor)); // darken diffuse light a bit
+        objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
+
+        objectShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        objectShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        objectShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+        objectShader.setFloat("material.shininess", 32.0f);
         
         glBindVertexArray(VAO); 
         for(int i = 0; i < cubeCount; ++i) {
             glm::mat4 model = glm::translate(identity, cubePositions[i]);
             float angle = 20.0f * i;
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            objectShader.setVec3("objectColor", glm::value_ptr( cubeColors[i] ));
             objectShader.setMat4f("model", 1, GL_FALSE, glm::value_ptr(model));
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }

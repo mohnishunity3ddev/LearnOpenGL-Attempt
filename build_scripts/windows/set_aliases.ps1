@@ -13,6 +13,7 @@ Set-Alias -Name opt         -Value "undefined"
 Set-Alias -Name prof        -Value "undefined"
 Set-Alias -Name create      -Value "undefined"
 Set-Alias -Name push        -Value "undefined"
+Set-Alias -Name pull        -Value "undefined"
 
 if(Test-Path alias:rebuild*) {
     Remove-Alias rebuild
@@ -56,6 +57,9 @@ if(Test-Path alias:create*) {
 if(Test-Path alias:push*) {
     Remove-Alias push
 }
+if(Test-Path alias:pull*) {
+    Remove-Alias pull
+}
 
 Set-Alias -Name rebuild -Value $PSScriptRoot\rebuild.ps1 -Scope Global
 Set-Alias -Name rb -Value $PSScriptRoot\rebuild.ps1 -Scope Global
@@ -73,5 +77,6 @@ Set-Alias -Name run -Value $PSScriptRoot\run_project.ps1 -Scope Global
 Set-Alias -Name create -Value $PSScriptRoot\create_project.ps1 -Scope Global
 
 Set-Alias -Name push -Value $PSScriptRoot\git_push.ps1 -Scope Global
+Set-Alias -Name pull -Value $PSScriptRoot\git_pull.ps1 -Scope Global
 
-Write-Yellow "All Command Aliases are set. You can use build/rebuild/msvc/clean/goto/run/create/push ..."
+Write-Yellow "All Command Aliases are set. You can use build/rebuild/msvc/clean/goto/run/create/push/pull ..."

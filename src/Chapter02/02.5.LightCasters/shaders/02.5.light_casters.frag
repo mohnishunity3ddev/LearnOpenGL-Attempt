@@ -30,7 +30,6 @@ uniform vec3 viewPos;
 void main() {
     vec3 diffuseTex     = texture(material.diffuse, TexCoord).rgb;
     vec3 specularTex    = texture(material.specular, TexCoord).rgb;
-    vec3 emissionTex    = texture(material.emission, TexCoord).rgb;
 
     // Ambient
     vec3 ambient    = light.ambient * diffuseTex;
@@ -46,10 +45,7 @@ void main() {
     vec3 reflectDir     = normalize(reflect(-lightDir, normal));
     float spec          = pow(max(dot(viewDirection, reflectDir), 0.0), material.shininess);
     vec3 specular       = light.specular * spec * specularTex;
-
-    vec3 emission = emissionTex;
  
-    vec3 result = ambient + diffuse + specular + emission;
-
+    vec3 result = ambient + diffuse + specular;
     FragColor = vec4(result, 1.0);
 }

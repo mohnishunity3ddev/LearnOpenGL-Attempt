@@ -36,47 +36,48 @@ glm::vec3 cubePositions[] = {
 glm::vec3 cubeColors[JARRAY_SIZE(cubePositions)];
 
 float cubeVertices[] = {
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+    // positions          // normals           // texture coords
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
 
 // settings
@@ -96,8 +97,9 @@ float lastFrame = 0.0f;
 // Light
 glm::vec3 yellowColor = glm::vec3(1.0f, 1.0f, 0.0f);
 glm::vec3 whiteColor = glm::vec3(1.0f);
-glm::vec3 lightColor = glm::vec3(0.5f);
-glm::vec3 lightPosition = glm::vec3(0.0f, 0.0f, -5.0f);
+
+glm::vec3 lightColor = glm::vec3(1.0f);
+glm::vec3 lightPosition = glm::vec3(-2.0f, 2.0f, 5.0f);
 
 
 void APIENTRY glDebugOutput(GLenum source, 
@@ -199,8 +201,8 @@ int main() {
     // Our Vertex and Fragment Shaders.
     Shader objectShader("../shaders/02.4.lighting_maps.vert", "../shaders/02.4.lighting_maps.frag");
     Shader lightShader("../shaders/light_shader.vert", "../shaders/light_shader.frag");
-    // Texture containerTexture("container.jpg", GL_TEXTURE_2D, true, GL_RGB, GL_RGB, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
-    // Texture awesomeFaceTexture("awesomeface.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
+    Texture containerDiffuse("container2_diffuse.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
+    Texture containerSpecular("container2_specular.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
     
     // Vertex Data
     unsigned int VBO, VAO;
@@ -212,12 +214,16 @@ int main() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
     // Vertex Position Attribute.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Vertex Normal Attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    // Vertex Normal Attribute.
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    // Vertex Texture Coordinates.
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     unsigned int lightingVAO;
     glGenVertexArrays(1, &lightingVAO);
@@ -225,7 +231,7 @@ int main() {
     glBindVertexArray(lightingVAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0 );
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0 );
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
@@ -233,6 +239,15 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
     size_t cubeCount = JARRAY_SIZE(cubePositions);
+
+    
+    containerDiffuse.bindToTextureUnit(0);
+    containerSpecular.bindToTextureUnit(1);
+
+    objectShader.use();
+    objectShader.setInt("material.diffuse", 0);
+    objectShader.setInt("material.specular", 1);
+
 
     const float lightMoveSpeed = 50.0f;
     float angle = 0.0f;
@@ -250,26 +265,16 @@ int main() {
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
         // Oscillate light in a circle of radius 15 centered at 0.0
-        // angle += deltaTime * lightMoveSpeed;
-        // float circleRadius = 8.0f;
-        // glm::vec3 circleCenter = glm::vec3(0.0f, 0.0f, -6.0f);
-        // float lightXPos = cos(glm::radians(angle)) * circleRadius;
-        // float lightZPos = sin(glm::radians(angle)) * circleRadius;
-        // lightPosition.x = lightXPos; lightPosition.z = lightZPos;
-        // lightPosition += circleCenter;
-
-        // Changing Light color
-        glm::vec3 _lightColor;
-        _lightColor.x = sin(currentFrame * 0.2f);
-        _lightColor.y = sin(currentFrame * 0.7f);
-        _lightColor.z = sin(currentFrame * 1.3f);
-        
-        glm::vec3 _lightDiffuseColor = _lightColor * glm::vec3(0.5f);
-        glm::vec3 _lightAmbientColor = _lightDiffuseColor * glm::vec3(0.2f);
-
+        angle += deltaTime * lightMoveSpeed;
+        float circleRadius = 8.0f;
+        glm::vec3 circleCenter = glm::vec3(0.0f, 0.0f, -6.0f);
+        float lightXPos = cos(glm::radians(angle)) * circleRadius;
+        float lightZPos = sin(glm::radians(angle)) * circleRadius;
+        lightPosition.x = lightXPos; lightPosition.z = lightZPos;
+        lightPosition += circleCenter;
 
         lightShader.use();
-        lightShader.setVec3("lightColor", &_lightDiffuseColor[0]);
+        lightShader.setVec3("lightColor", &lightColor[0]);
         glBindVertexArray(lightingVAO);
 
         glm::mat4 lightModel = glm::translate(identity, lightPosition);
@@ -285,23 +290,19 @@ int main() {
         objectShader.setMat4f("projection", 1, GL_FALSE, glm::value_ptr(projection));
         objectShader.setVec3("viewPos", &camera.Position[0]);
         objectShader.setVec3("light.position", glm::value_ptr(lightPosition));
-        objectShader.setVec3("light.ambient",  glm::value_ptr(_lightAmbientColor));
-        objectShader.setVec3("light.diffuse",  glm::value_ptr(_lightDiffuseColor)); // darken diffuse light a bit
+        objectShader.setVec3("light.ambient",  glm::value_ptr(lightColor));
+        objectShader.setVec3("light.diffuse",  glm::value_ptr(lightColor));
         objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
 
         objectShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        objectShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        objectShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-        objectShader.setFloat("material.shininess", 32.0f);
+        objectShader.setFloat("material.shininess", 512);
         
         glBindVertexArray(VAO); 
-        for(int i = 0; i < cubeCount; ++i) {
-            glm::mat4 model = glm::translate(identity, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            objectShader.setMat4f("model", 1, GL_FALSE, glm::value_ptr(model));
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        glm::mat4 model = glm::translate(identity, cubePositions[0]);
+        float angle = 20.0f * 0;
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        objectShader.setMat4f("model", 1, GL_FALSE, glm::value_ptr(model));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glBindVertexArray(0);
 

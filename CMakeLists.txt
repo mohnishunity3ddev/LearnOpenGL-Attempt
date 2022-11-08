@@ -103,3 +103,5 @@ add_subdirectory(src/Chapter02/02.2.Basic.Lighting_exercise03)
 add_subdirectory(src/Chapter02/02.2.Basic.Lighting_exercise04_Gouraud)
 add_subdirectory(src/Chapter02/02.3.Materials)
 add_subdirectory(src/Chapter02/02.3.Materials_exercise02)
+
+add_subdirectory(src/Chapter02/02.4.LightingMaps)

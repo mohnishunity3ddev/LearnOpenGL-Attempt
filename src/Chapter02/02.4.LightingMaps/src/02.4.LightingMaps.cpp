@@ -295,7 +295,7 @@ int main() {
         objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
 
         objectShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        objectShader.setFloat("material.shininess", 512);
+        objectShader.setFloat("material.shininess", 256);
         
         glBindVertexArray(VAO); 
         glm::mat4 model = glm::translate(identity, cubePositions[0]);

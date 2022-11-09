@@ -57,6 +57,7 @@ include_directories(external/glm)
 include_directories(external/glad/include)
 include_directories(external/stb)
 include_directories(external/assimp/include)
+include_directories($<TARGET_FILE_DIR:assimp>/../include)
 include_directories(external/imgui)
 include_directories(common)
 
@@ -67,9 +68,9 @@ set_property(TARGET glfw            PROPERTY FOLDER "ThirdPartyLibraries")
 set_property(TARGET glad            PROPERTY FOLDER "ThirdPartyLibraries")
 set_property(TARGET assimp          PROPERTY FOLDER "ThirdPartyLibraries")
 
+
 # Include Common SharedUtils
 add_subdirectory(common)
-# set_property(TARGET SharedUtils     PROPERTY FOLDER "ThirdPartyLibraries")
 
 
 add_subdirectory(src/Chapter01/01.getting.started)

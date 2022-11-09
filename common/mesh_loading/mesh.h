@@ -10,7 +10,7 @@
 struct VertexAttribute {
     glm::vec3 position;
     glm::vec3 normal;
-    glm::vec3 texCoords;
+    glm::vec2 texCoords;
 };
 
 struct MeshTexture {
@@ -18,6 +18,7 @@ struct MeshTexture {
     unsigned int id;
     // type of the shader. diffuse/specular
     std::string type;
+    std::string path;
 };
 
 class Mesh {

@@ -99,8 +99,131 @@ glm::vec3 yellowColor = glm::vec3(1.0f, 1.0f, 0.0f);
 glm::vec3 whiteColor = glm::vec3(1.0f);
 
 glm::vec3 lightColor = glm::vec3(1.0f);
-glm::vec3 lightPosition = glm::vec3(-2.0f, 2.0f, 5.0f);
+// glm::vec3 lightPosition = glm::vec3(-2.0f, 2.0f, 5.0f);
+glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
 
+
+
+typedef struct PointLight {
+public:
+    glm::vec3 position;
+
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+
+    // for attenuation purposes.
+    float constant;
+    float linear;
+    float quadratic;
+
+    void uploadPosition(const Shader& shader, const std::string& positionVarName) {
+        shader.use();
+        shader.setVec3(positionVarName, glm::value_ptr(position));
+    }
+
+    void uploadToShader(const Shader& shader, 
+        const std::string& positionVarName, 
+        const std::string& ambientVarName, const std::string& diffuseVarName, const std::string& specularVarName,
+        const std::string& constantVarName, const std::string& linearVarName, const std::string& quadraticVarName ) {
+
+        shader.use();
+        shader.setVec3(positionVarName, glm::value_ptr(position));
+
+        shader.setVec3(ambientVarName, glm::value_ptr(ambient));
+        shader.setVec3(diffuseVarName, glm::value_ptr(diffuse));
+        shader.setVec3(specularVarName, glm::value_ptr(specular));
+
+        shader.setFloat(constantVarName, constant);
+        shader.setFloat(linearVarName, linear);
+        shader.setFloat(quadraticVarName, quadratic);
+    }
+
+    void uploadToShader(const Shader& shader) {
+        shader.use();
+        shader.setVec3("point_light.position", glm::value_ptr(position));
+        shader.setVec3("point_light.ambient", glm::value_ptr(ambient));
+        shader.setVec3("point_light.diffuse", glm::value_ptr(diffuse));
+        shader.setVec3("point_light.specular", glm::value_ptr(specular));
+        shader.setFloat("point_light.constant", constant);
+        shader.setFloat("point_light.linear", linear);
+        shader.setFloat("point_light.quadratic", quadratic);
+    }
+} point_light;
+
+typedef struct DirectionalLight {
+public:
+    glm::vec3 direction;
+
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+
+    void uploadDirection(const Shader& shader, const std::string& directionVarName) {
+        shader.use();
+        shader.setVec3(directionVarName, glm::value_ptr(direction));
+    }
+
+    void uploadToShader(const Shader& shader, 
+        const std::string& directionVarName, 
+        const std::string& ambientVarName, 
+        const std::string& diffuseVarName, 
+        const std::string& specularVarName ) {
+        
+        shader.use();
+        shader.setVec3(directionVarName, glm::value_ptr(direction));
+        shader.setVec3(ambientVarName, glm::value_ptr(ambient));
+        shader.setVec3(diffuseVarName, glm::value_ptr(diffuse));
+        shader.setVec3(specularVarName, glm::value_ptr(specular));
+    }
+
+    void uploadToShader(const Shader& shader) {
+        shader.use();
+        shader.setVec3("directional_light.direction", glm::value_ptr(direction));
+        shader.setVec3("directional_light.ambient", glm::value_ptr(ambient));
+        shader.setVec3("directional_light.diffuse", glm::value_ptr(diffuse));
+        shader.setVec3("directional_light.specular", glm::value_ptr(specular));
+    }
+} directional_light;
+
+typedef struct AreaLight {
+public:
+    glm::vec3 position;
+    glm::vec3 direction;
+    float cutoff;
+
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+
+    // for attenuation purposes.
+    float constant;
+    float linear;
+    float quadratic;
+
+    void uploadToShader(const Shader& shader) {
+        shader.use();
+        shader.setVec3("area_light.position", glm::value_ptr(position));
+        shader.setVec3("area_light.direction", glm::value_ptr(direction));
+        shader.setFloat("area_light.cutoff", cutoff);
+        
+        shader.setVec3("area_light.ambient", glm::value_ptr(ambient));
+        shader.setVec3("area_light.diffuse", glm::value_ptr(diffuse));
+        shader.setVec3("area_light.specular", glm::value_ptr(specular));
+
+        shader.setFloat("area_light.constant", constant);
+        shader.setFloat("area_light.linear", linear);
+        shader.setFloat("area_light.quadratic", quadratic);
+    }
+
+    void updatePositionAndDirection(const Shader& shader, const glm::vec3& position, const glm::vec3& direction) {
+        shader.use();
+        this->position = position;
+        this->direction = direction;
+        shader.setVec3("area_light.position", glm::value_ptr(position));
+        shader.setVec3("area_light.direction", glm::value_ptr(direction));
+    }
+} area_light;
 
 void APIENTRY glDebugOutput(GLenum source, 
                             GLenum type, 
@@ -203,6 +326,7 @@ int main() {
     Shader lightShader("../shaders/light_shader.vert", "../shaders/light_shader.frag");
     Texture diffuseMap("container2_diffuse.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
     Texture specularMap("container2_specular.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
+    Texture cookieMap("Cookie_tutorial_texture_flashlight.png", GL_TEXTURE_2D, true, GL_RGB, GL_RGB, GL_REPEAT, GL_REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, true);
     
     // Vertex Data
     unsigned int VBO, VAO;
@@ -243,11 +367,45 @@ int main() {
     
     diffuseMap.bindToTextureUnit(0);
     specularMap.bindToTextureUnit(1);
+    cookieMap.bindToTextureUnit(2);
 
     objectShader.use();
     objectShader.setInt("material.diffuse", 0);
     objectShader.setInt("material.specular", 1);
+    objectShader.setInt("area_light.cookie", 2);
 
+    directional_light directional_light {
+        .direction = lightDirection,
+        .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+        .diffuse = glm::vec3(0.5f, 0.5f, 0.5f),
+        .specular = glm::vec3(1.0f, 1.0f, 1.0f)
+    };
+    directional_light.uploadToShader(objectShader);
+
+    point_light point_light {
+        .position = glm::vec3(0.0f, 0.0, 2.0f),
+        .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+        .diffuse = glm::vec3(0.5f, 0.5f, 0.5f),
+        .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+        .constant = 1.0f,
+        .linear = 0.09f,
+        .quadratic = 0.032f
+    };
+    point_light.uploadToShader(objectShader);
+
+    area_light flashlight { 
+        .position   = camera.Position,
+        .direction  = camera.Front,
+        .cutoff     = glm::radians(12.5f),
+        .ambient    = glm::vec3(0.2f, 0.2f, 0.2f),
+        .diffuse    = glm::vec3(1.0f),
+        .specular   = glm::vec3(1.0f, 1.0f, 1.0f),
+        .constant   = 1.0f,
+        .linear     = 0.09f,
+        .quadratic  = 0.032f
+     };
+     flashlight.uploadToShader(objectShader);
+    
     const float lightMoveSpeed = 50.0f;
     float angle = 0.0f;
     while (!glfwWindowShouldClose(window)) {
@@ -262,6 +420,7 @@ int main() {
 
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 lightProjection = glm::perspective(glm::radians(16.5f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
         // Oscillate light in a circle of radius 15 centered at 0.0
         // angle += deltaTime * lightMoveSpeed;
@@ -272,38 +431,38 @@ int main() {
         // lightPosition.x = lightXPos; lightPosition.z = lightZPos;
         // lightPosition += circleCenter;
 
-        lightPosition = glm::vec3(0.0f, 0.0f, 2.0f);
+        // lightShader.use();
+        // lightShader.setVec3("lightColor", glm::value_ptr( point_light.diffuse ));
+        // glBindVertexArray(lightingVAO);
 
-        lightShader.use();
-        lightShader.setVec3("lightColor", &lightColor[0]);
-        glBindVertexArray(lightingVAO);
+        // glm::mat4 lightModel = glm::translate(identity, point_light.position);
+        // lightModel = glm::scale(lightModel, glm::vec3(0.25f));
+        // lightShader.setMat4f("View", 1, false, glm::value_ptr(view));
+        // lightShader.setMat4f("Projection", 1, false, glm::value_ptr(projection));
+        // lightShader.setMat4f("Model", 1, false, glm::value_ptr(lightModel));
 
-        glm::mat4 lightModel = glm::translate(identity, lightPosition);
-        lightModel = glm::scale(lightModel, glm::vec3(0.25f));
-        lightShader.setMat4f("View", 1, false, glm::value_ptr(view));
-        lightShader.setMat4f("Projection", 1, false, glm::value_ptr(projection));
-        lightShader.setMat4f("Model", 1, false, glm::value_ptr(lightModel));
-
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
 
         objectShader.use();
         objectShader.setMat4f("view", 1, GL_FALSE, glm::value_ptr(view));
         objectShader.setMat4f("projection", 1, GL_FALSE, glm::value_ptr(projection));
         objectShader.setVec3("viewPos", &camera.Position[0]);
-        objectShader.setVec3("light.position", glm::value_ptr(lightPosition));
-        objectShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-        objectShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-        objectShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         objectShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
         objectShader.setFloat("material.shininess", 32);
+
+        flashlight.updatePositionAndDirection(objectShader, camera.Position, camera.Front);
+        objectShader.setMat4f("flashlightProj", 1, GL_FALSE, glm::value_ptr(lightProjection));
         
         glBindVertexArray(VAO); 
-        glm::mat4 model = glm::translate(identity, cubePositions[0]);
-        float angle = 20.0f * 0;
-        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-        objectShader.setMat4f("model", 1, GL_FALSE, glm::value_ptr(model));
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        for(size_t i = 0; i < 10; i++) {
+            glm::mat4 model = glm::translate(identity, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            objectShader.setMat4f("model", 1, GL_FALSE, glm::value_ptr(model));
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         glBindVertexArray(0);
 

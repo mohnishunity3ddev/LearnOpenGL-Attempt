@@ -169,12 +169,13 @@ int main()
         }
         glBindVertexArray(0);
 
-        ImGui::Begin("My name is window, ImGUI window");
-        ImGui::Text("Hello there adventurer!");
-        ImGui::Checkbox("Draw Rectangle", &drawTriangle);
-        ImGui::SliderFloat("Size", &size, 0.1f, 2.0f);
-        ImGui::ColorEdit4("Rectangle Color", color);
-        ImGui::End();
+        // ImGui::Begin("My name is window, ImGUI window");
+        // ImGui::Text("Hello there adventurer!");
+        // ImGui::Checkbox("Draw Rectangle", &drawTriangle);
+        // ImGui::SliderFloat("Size", &size, 0.1f, 2.0f);
+        // ImGui::ColorEdit4("Rectangle Color", color);
+        // ImGui::End();
+        ImGui::ShowDemoWindow();
 
         glUniform1f(glGetUniformLocation(shaderProgram, "size"), size);
         glUniform4f(glGetUniformLocation(shaderProgram, "color"), color[0], color[1], color[2], color[3]);

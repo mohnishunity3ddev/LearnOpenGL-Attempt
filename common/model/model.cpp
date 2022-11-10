@@ -6,8 +6,8 @@
 
 #include <iostream>
 
-Model::Model(const char *path) {
-    loadModel(path);
+Model::Model(const char *path, bool isPathRelative) {
+    loadModel(path, isPathRelative);
 }
 
 void Model::Draw(const Shader &shader) {
@@ -76,8 +76,8 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         /// Assimp allows every vertex to have 8 different texture coordinates per vertex. We only want the first set of tex coords.
         if(mesh->mTextureCoords[0]) {
             glm::vec2 tmp;
-            tmp.x = mesh->mTextureCoords[i][0].x;
-            tmp.y = mesh->mTextureCoords[i][0].y;
+            tmp.x = mesh->mTextureCoords[0][i].x;
+            tmp.y = mesh->mTextureCoords[0][i].y;
             vertex.texCoords = tmp;
         } else {
             vertex.texCoords = glm::vec2(0.0f, 0.0f);

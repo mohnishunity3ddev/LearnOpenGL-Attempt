@@ -1,5 +1,5 @@
 #include "texture.h"
-#include "../project_paths.h"
+#include <project_paths.h>
 #include <shader/shader.h>
 
 #define STB_IMAGE_IMPLEMENTATION

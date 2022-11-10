@@ -113,3 +113,5 @@ add_subdirectory(src/Chapter02/02.4.LightingMaps_exercise03)
 add_subdirectory(src/Chapter02/02.4.LightingMaps_exercise04)
 add_subdirectory(src/Chapter02/02.5.LightCasters)
 add_subdirectory(src/Chapter02/02.6.MultipleLights)
+
+add_subdirectory(src/Chapter03/03.1.MeshLoading)

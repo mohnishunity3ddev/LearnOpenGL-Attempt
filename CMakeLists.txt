@@ -118,3 +118,5 @@ add_subdirectory(src/Chapter03/03.1.MeshLoading)
 
 add_subdirectory(src/Chapter04/04.1.DepthTesting)
 add_subdirectory(src/Chapter04/04.2.StencilTesting)
+
+add_subdirectory(src/Chapter04/04.3.Blending)

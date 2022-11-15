@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <random>
+#include <map>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -19,9 +20,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
-
-void DrawFloor(const Shader& shader);
-void DrawTwoContainers(const Shader& shader, const float scale, const glm::vec3& pos1, const glm::vec3& pos2);
 
 glm::vec3 cubePositions[] = {
     glm::vec3( 0.0f,  0.0f,  0.0f), 
@@ -89,6 +87,27 @@ float cubeVertices[] = {
      0.5f,  0.5f,  0.5f,    1.0f, 0.0f,   0.0f,  1.0f,  0.0f,  
     -0.5f,  0.5f,  0.5f,    0.0f, 0.0f,   0.0f,  1.0f,  0.0f,  
     -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,   0.0f,  1.0f,  0.0f
+};
+
+float quadVertices[] = {
+    // vertices             // texture coordinates   
+     1.0f,  1.0f, 0.0f,     1.0f,  1.0f,                        // top right
+     1.0f, -1.0f, 0.0f,     1.0f,  0.0f,                        // bottom right
+    -1.0f, -1.0f, 0.0f,     0.0f,  0.0f,                         // bottom left
+    -1.0f,  1.0f, 0.0f,     0.0f,  1.0f                        // top left 
+};
+
+unsigned int quadIndices[] = {
+    0, 1, 3,    // first triangle
+    1, 2, 3     // second triangle
+};
+
+glm::vec3 transparentPositions[] = {
+    glm::vec3(-1.5f,  0.0f, -0.48f),
+    glm::vec3( 1.5f,  0.0f,  0.51f),
+    glm::vec3( 0.0f,  0.0f,  0.70f),
+    glm::vec3(-0.3f,  0.0f, -2.30f),
+    glm::vec3( 0.5f,  0.0f, -0.60f)
 };
 
 // settings
@@ -205,11 +224,13 @@ int main() {
     }
 
     // Our Vertex and Fragment Shaders.
-    Shader shader("../shaders/04.2.stencil_test.vert", "../shaders/04.2.stencil_test.frag");
-    Shader outlineShader("../shaders/04.2.stencil_test.vert", "../shaders/04.2.shader_single_color.frag");
+    Shader shader("../shaders/04.3.blending.vert", "../shaders/04.3.blending.frag");
+    Shader grassShader("../shaders/04.3.blending.vert", "../shaders/04.3.blending_grass.frag");
 
     Texture marbleTex("marble.jpg");
     Texture metalTex("metal.png");
+    // Texture grassTex("grass.png", false);
+    Texture windowsTexture("blending_transparent_window.png", false);
     
     // Cube VAO
     unsigned int cubeVBO, cubeVAO;
@@ -242,6 +263,22 @@ int main() {
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 
+    // Quad VAO
+    unsigned int quadVAO, quadVBO, quadEBO;
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadEBO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadIndices), quadIndices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+
     glm::mat4 identity = glm::mat4(1.0f);
 
     shader.use();
@@ -254,7 +291,8 @@ int main() {
     // Disable writing to the depth buffer.
     // glDepthMask(GL_FALSE);
 
-    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glm::vec3 cubePos1 = glm::vec3(-1.0f, 0.0f, -1.0f);
     glm::vec3 cubePos2 = glm::vec3( 2.0f, 0.0f,  0.0f);
@@ -267,51 +305,51 @@ int main() {
         processInput(window);
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glm::mat4 model =  identity;
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-        glEnable(GL_DEPTH_TEST);
-
-        // What happens if stencil test fails, depth test fails but stencil passes, both tests fail. 
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         
-        // Disable writing to the stencil buffer. Each bit in the stencil buffer ends up as a 0.
-        glStencilMask(0x00);
         shader.use();
         shader.setMat4f("view", 1, false, glm::value_ptr(view));
         shader.setMat4f("projection", 1, false, glm::value_ptr(projection));
+
+        //cubes
+        glBindVertexArray(cubeVAO);
+        marbleTex.bindToTextureUnit(0);
+        model = glm::translate(identity, cubePos1);
+        shader.setMat4f("model", 1, false, glm::value_ptr(model));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        model = glm::translate(identity, cubePos2);
+        shader.setMat4f("model", 1, false, glm::value_ptr(model));
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
         // plane
         glBindVertexArray(planeVAO);
         metalTex.bindToTextureUnit(0);
-        DrawFloor(shader);
+        model = identity;
+        shader.setMat4f("model", 1, false, glm::value_ptr(model));
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glBindVertexArray(quadVAO);
+        windowsTexture.bindToTextureUnit(0);
+
+        // Drawing Grass which is semi transparent in reverse order from farthest to nearest to camera.
+        // because Depth Values do not work well with blending.
+        uint32_t transparentCount = JARRAY_SIZE(transparentPositions); 
+        std::map<float, glm::vec3> sortedMap;
+        for(uint32_t i = 0; i < transparentCount; ++i) {
+            float distanceFromCamera = glm::length(camera.Position - transparentPositions[i]);
+            sortedMap[distanceFromCamera] = transparentPositions[i];
+        }
+        for(std::map<float, glm::vec3>::reverse_iterator it = sortedMap.rbegin(); it != sortedMap.rend(); ++it) {
+            model = glm::translate(identity, it->second);
+            model = glm::scale(model, glm::vec3(0.4f));
+            grassShader.setMat4f("model", 1, false, glm::value_ptr(model));
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
         
-        // Stencil test passes always.
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilMask(0xFF);
-        //cubes.. Draw Two Containers.
-        glBindVertexArray(cubeVAO);
-        marbleTex.bindToTextureUnit(0);
-        DrawTwoContainers(shader, 1.0f, cubePos1, cubePos2);
-
-        // Stencil test passes when stencil buffer values are not equal to the ref value in the 2nd argument.
-        // Here, all fragments with stencil value 1 get discarded. 
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-        // stencil buffer ends up as all zeros. Disable writing to the stencil buffer.
-        glStencilMask(0x00);
-        glDisable(GL_DEPTH_TEST);
-        outlineShader.use();
-        outlineShader.setMat4f("view", 1, false, glm::value_ptr(view));
-        outlineShader.setMat4f("projection", 1, false, glm::value_ptr(projection));
-        DrawTwoContainers(outlineShader, 1.1f, cubePos1, cubePos2);
-
-        glStencilMask(0xFF);
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glEnable(GL_DEPTH_TEST);
-
-
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
@@ -319,29 +357,15 @@ int main() {
     }
 
     glDeleteVertexArrays(1, &cubeVAO);
+    glDeleteVertexArrays(1, &planeVAO);
+    glDeleteVertexArrays(1, &quadVAO);
     glDeleteBuffers(1, &cubeVBO);
+    glDeleteBuffers(1, &planeVBO);
+    glDeleteBuffers(1, &quadVBO);
+    glDeleteBuffers(1, &quadEBO);
 
     glfwTerminate();
     return 0;
-}
-
-void DrawFloor(const Shader& shader) {
-    glm::mat4 model = glm::mat4(1.0f);
-    shader.setMat4f("model", 1, false, glm::value_ptr(model));
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-}
-
-void DrawTwoContainers(const Shader& shader, const float scale, const glm::vec3& pos1, const glm::vec3& pos2) {
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, pos1);
-    model = glm::scale(model, glm::vec3(scale));
-    shader.setMat4f("model", 1, false, glm::value_ptr(model));
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, pos2);
-    model = glm::scale(model, glm::vec3(scale));
-    shader.setMat4f("model", 1, false, glm::value_ptr(model));
-    glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void processInput(GLFWwindow *window) {

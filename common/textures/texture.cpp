@@ -52,7 +52,7 @@ Texture::Texture(
     glBindTexture(this->texture_type, 0);
 }
 
-Texture::Texture(const char *textureName) { 
+Texture::Texture(const char *textureName, bool textureShouldWrap) { 
     texture_path = texture_dir_path;
     texture_path.append(textureName);
     glGenTextures(1, &texture_handle);
@@ -75,8 +75,10 @@ Texture::Texture(const char *textureName) {
         glTexImage2D(this->texture_type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixelData);
         glGenerateMipmap(this->texture_type);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        GLint wrapParam = textureShouldWrap ? GL_REPEAT : GL_CLAMP_TO_EDGE;
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapParam);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapParam);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

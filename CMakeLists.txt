@@ -57,7 +57,7 @@ include_directories(external/glm)
 include_directories(external/glad/include)
 include_directories(external/stb)
 include_directories(external/assimp/include)
-include_directories($<TARGET_FILE_DIR:assimp>/../include)
+include_directories($<TARGET_FILE_DIR:assimp>/../include) # there is one config.h file which gets build in assimp's build directory by cmake.
 include_directories(external/imgui)
 include_directories(common)
 
@@ -115,3 +115,5 @@ add_subdirectory(src/Chapter02/02.5.LightCasters)
 add_subdirectory(src/Chapter02/02.6.MultipleLights)
 
 add_subdirectory(src/Chapter03/03.1.MeshLoading)
+
+add_subdirectory(src/Chapter04/04.1.DepthTesting)

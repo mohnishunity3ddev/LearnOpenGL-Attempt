@@ -52,6 +52,42 @@ Texture::Texture(
     glBindTexture(this->texture_type, 0);
 }
 
+Texture::Texture(const char *textureName) { 
+    texture_path = texture_dir_path;
+    texture_path.append(textureName);
+    glGenTextures(1, &texture_handle);
+
+    stbi_set_flip_vertically_on_load(true);
+
+    pixelData = stbi_load(texture_path.c_str(), &width, &height, &nrChannels, 0);
+    if(pixelData) {
+        GLenum format;
+        if(nrChannels == 1) {
+            format = GL_RED;
+        } else if (nrChannels == 3) {
+            format = GL_RGB;
+        } else if(nrChannels == 4) {
+            format = GL_RGBA;
+        }
+
+        this->texture_type = GL_TEXTURE_2D;
+        glBindTexture(this->texture_type, texture_handle);
+        glTexImage2D(this->texture_type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixelData);
+        glGenerateMipmap(this->texture_type);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+    } else {
+        std::cout << "Texture failed to load at path: " << texture_path << std::endl;
+        stbi_image_free(pixelData);
+        pixelData = 0;
+    }
+}
+
 void Texture::bindToTextureUnit(unsigned int textureUnit) const {
     if(texture_handle != UINT_MAX) {
         glActiveTexture(GL_TEXTURE0 + textureUnit);
@@ -62,6 +98,7 @@ void Texture::bindToTextureUnit(unsigned int textureUnit) const {
 Texture::~Texture() {
     if(pixelData) {
         stbi_image_free(pixelData);
+        pixelData = 0;
         std::cout << this->texture_path << " freed.\n";
     }
 }

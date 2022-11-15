@@ -24,7 +24,7 @@ public:
             GLint minFilterMethod, GLint magFilterMethod, 
             bool useMipmap);
 
-    Texture() = delete;
+    Texture(const char *textureName);
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
     Texture(Texture&&) = delete;

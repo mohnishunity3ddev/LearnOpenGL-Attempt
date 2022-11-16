@@ -124,3 +124,5 @@ add_subdirectory(src/Chapter04/04.3.Blending)
 add_subdirectory(src/Chapter04/04.4.FaceCulling)
 
 add_subdirectory(src/Chapter04/04.5.Framebuffers)
+
+add_subdirectory(src/Chapter04/04.5.Framebuffers_Exercise01)

@@ -73,6 +73,10 @@ public:
         return glm::lookAt(Position, Position + Front, Up);
     }
 
+    glm::mat4 getOppositeViewMatrix() {
+        return glm::lookAt(Position, Position - Front, Up);
+    }
+
     glm::mat4 customLookAt(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp) {
         // 1. Position = known
         // 2. Calculate cameraDirection

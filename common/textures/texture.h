@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <glad/glad.h>
 
 
@@ -43,6 +44,7 @@ public:
     int getWidth() const noexcept { return width; }
     int getHeight() const noexcept { return height; }
     int getChannels() const noexcept { return nrChannels; }
+    static unsigned int loadCubemap(std::vector<std::string> faces);
 private:
     unsigned char* pixelData = nullptr;
     std::string texture_path;

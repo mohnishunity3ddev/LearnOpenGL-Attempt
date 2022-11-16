@@ -3,6 +3,7 @@
 #include <shader/shader.h>
 #include <textures/texture.h>
 #include <camera/camera.h>
+#include <model/model.h>
 
 #include <iostream>
 #include <random>
@@ -249,6 +250,8 @@ int main() {
     // Our Vertex and Fragment Shaders.
     Shader shader("../shaders/04.6.cubemaps.vert", "../shaders/04.6.cubemaps.frag");
     Shader skyboxShader("../shaders/04.6.skybox.vert", "../shaders/04.6.skybox.frag");
+
+    Model backpack("backpack/backpack.obj");
     
     // Cube VAO
     unsigned int cubeVBO, cubeVAO;
@@ -321,9 +324,10 @@ int main() {
         shader.setMat4f("view", 1, false, glm::value_ptr(view));
         shader.setMat4f("projection", 1, false, glm::value_ptr(projection));
         //cubes
-        glBindVertexArray(cubeVAO);
         shader.setMat4f("model", identity);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glBindVertexArray(cubeVAO);
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
+        backpack.Draw(shader);
 
         // Skybox
         skyboxShader.use();

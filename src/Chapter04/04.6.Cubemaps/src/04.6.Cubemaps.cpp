@@ -264,8 +264,8 @@ int main() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     // Vertex Normals
-    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-    // glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
     glBindVertexArray(0);
 
     // Skybox VAO
@@ -296,10 +296,6 @@ int main() {
     };
     unsigned int cubemapTexture = Texture::loadCubemap(faces);
 
-    Texture marbleTex("marble.jpg");
-    shader.use();
-    shader.setInt("texture1", 0);
-
     glm::mat4 identity = glm::mat4(1.0f);
 
     glEnable(GL_DEPTH_TEST);
@@ -320,7 +316,8 @@ int main() {
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
         shader.use();
-        marbleTex.bindToTextureUnit(0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        shader.setVec3("eyePosition", &camera.Position[0]);
         shader.setMat4f("view", 1, false, glm::value_ptr(view));
         shader.setMat4f("projection", 1, false, glm::value_ptr(projection));
         //cubes

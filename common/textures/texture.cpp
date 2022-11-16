@@ -52,6 +52,22 @@ Texture::Texture(
     glBindTexture(this->texture_type, 0);
 }
 
+Texture::Texture(unsigned int screenWidth, unsigned int screenHeight) {
+    createTextureAttachment(screenWidth, screenHeight);
+}
+
+void Texture::createTextureAttachment(unsigned int width, unsigned int height) {
+    // Create default texture.
+    glGenTextures(1, &texture_handle);
+    this->texture_type = GL_TEXTURE_2D;
+    glBindTexture(this->texture_type, this->texture_handle);
+
+    glTexImage2D(this->texture_type, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+    glTextureParameteri(texture_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(texture_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
 Texture::Texture(const char *textureName, bool textureShouldWrap) { 
     texture_path = texture_dir_path;
     texture_path.append(textureName);

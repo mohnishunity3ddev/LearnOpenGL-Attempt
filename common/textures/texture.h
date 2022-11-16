@@ -25,6 +25,7 @@ public:
             bool useMipmap);
 
     Texture(const char *textureName, bool textureShouldWrap = true);
+    Texture(unsigned int screenWidth, unsigned int screen);
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
     Texture(Texture&&) = delete;
@@ -48,4 +49,6 @@ private:
     unsigned int texture_handle = UINT_MAX;
     GLenum texture_type; 
     int width = -1, height = -1, nrChannels = -1;
+
+    void createTextureAttachment(unsigned int width, unsigned int height);
 };

@@ -10,6 +10,12 @@ uniform vec3 eyePosition;
 
 void main() {
     vec3 I = normalize(FragPosition - eyePosition);
-    vec3 R = reflect(I, normalize(Normal));
+
+    // Reflection Environment Mapping
+    // vec3 R = reflect(I, normalize(Normal));
+
+    // Refraction Environment Mapping
+    float refractiveIndexRatio = 1.00 / 1.52;
+    vec3 R = refract(I, normalize(Normal), refractiveIndexRatio);
     fragColor = vec4(texture(skybox, R).rgb, 1.);
 }

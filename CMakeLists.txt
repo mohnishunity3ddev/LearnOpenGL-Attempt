@@ -120,3 +120,5 @@ add_subdirectory(src/Chapter04/04.1.DepthTesting)
 add_subdirectory(src/Chapter04/04.2.StencilTesting)
 
 add_subdirectory(src/Chapter04/04.3.Blending)
+
+add_subdirectory(src/Chapter04/04.4.FaceCulling)

@@ -3,7 +3,7 @@
 $arg = $args[0]
 $arg2 = $args[1]
 
-Invoke-Expression "& clean"
+Invoke-Expression "& cleanall"
 
 if([bool]$arg) {
     if(($arg -eq "ms") -or ($arg -eq "msvc")) {

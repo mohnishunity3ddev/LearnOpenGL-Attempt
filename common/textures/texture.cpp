@@ -81,8 +81,6 @@ Texture::Texture(const char *textureName, bool textureShouldWrap) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapParam);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-
     } else {
         std::cout << "Texture failed to load at path: " << texture_path << std::endl;
         stbi_image_free(pixelData);
@@ -94,6 +92,8 @@ void Texture::bindToTextureUnit(unsigned int textureUnit) const {
     if(texture_handle != UINT_MAX) {
         glActiveTexture(GL_TEXTURE0 + textureUnit);
         glBindTexture(this->texture_type, this->texture_handle);
+    } else {
+        std::cout << "Texture not set correctly. Could not bind it.\n";
     }
 }
 

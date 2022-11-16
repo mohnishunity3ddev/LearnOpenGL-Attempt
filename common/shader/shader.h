@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Shader {
 public:
@@ -32,6 +34,7 @@ public:
     void setVec3 (const std::string &name, const float v1, const float v2, const float v3) const;
     void setVec3Array (const std::string &name, const int count, const float *value) const;
     void setMat4f(const std::string &name, int count, bool isTranspose, const float* value) const;
+    void setMat4f(const std::string &name, const glm::mat4& value) const;
 
     // TODO: Remove this.
     void setTestColor(const std::string& name, float value) const;

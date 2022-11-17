@@ -130,3 +130,5 @@ add_subdirectory(src/Chapter04/04.5.Framebuffers_Exercise01)
 add_subdirectory(src/Chapter04/04.6.Cubemaps)
 
 add_subdirectory(src/Chapter04/04.8.AdvancedGLSL)
+
+add_subdirectory(src/Chapter04/04.9.GeometryShader)

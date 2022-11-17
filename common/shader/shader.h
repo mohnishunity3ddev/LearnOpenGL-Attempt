@@ -15,7 +15,7 @@ public:
      * @param vertexPath The path of the vertex shader file.
      * @param fragmentPath The path of the fragment shader file.
      */
-    Shader(const char* vertexPath, const char* fragmentPath);
+    Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
 
     Shader() = delete;
     Shader(const Shader&) = delete;

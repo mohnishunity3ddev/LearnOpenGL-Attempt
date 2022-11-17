@@ -4,7 +4,7 @@
 #include <iostream>
 #include <glad/glad.h>
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath) {
+Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath) {
 
     // 1. Retrieve the shader file contents.
     std::string vertexCode, fragmentCode;
@@ -41,7 +41,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     const char* fShaderCode = fragmentCode.c_str();
 
     // 2. Compile, Link Shaders.
-    unsigned int vertex, fragment;
+    unsigned int vertex, fragment, geometry;
     int success;
     char infoLog[512];
 
@@ -69,10 +69,44 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
         return;
     }
 
+    if(geometryPath != nullptr) {
+        std::string geometryCode;
+        std::ifstream gShaderFile;
+
+        gShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+        try {
+            gShaderFile.open(geometryPath);
+            std::stringstream geomStream;
+
+            geomStream << gShaderFile.rdbuf();
+            gShaderFile.close();
+
+            geometryCode = geomStream.str();
+        } catch(std::ifstream::failure e) {
+            std::cout << "Geometry Shader file error " << e.what() << "\n";
+            exit(EXIT_FAILURE);
+        }
+
+        const char* gShaderCode = geometryCode.c_str();
+
+        geometry = glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(geometry, 1, &gShaderCode, NULL);
+        glCompileShader(geometry);
+        glGetShaderiv(geometry, GL_COMPILE_STATUS, &success);
+        if(!success) {
+            memset(infoLog, 0, 512);
+            glGetShaderInfoLog(geometry, 512, NULL, infoLog);
+            std::cout << "Geometry Shader Compile Error: " << infoLog << " in geometry shader file: " << geometryPath << "\n";
+            return;
+        }
+    }
+
     // Shader Program
     ID = glCreateProgram();
     glAttachShader(ID, vertex);
     glAttachShader(ID, fragment);
+    if(geometryPath != nullptr) glAttachShader(ID, geometry);
     glLinkProgram(ID);
     glGetProgramiv(ID, GL_LINK_STATUS, &success);
     if(!success) {

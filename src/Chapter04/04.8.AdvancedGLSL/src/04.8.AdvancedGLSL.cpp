@@ -203,7 +203,32 @@ int main() {
     }
 
     // Our Vertex and Fragment Shaders.
-    Shader shader("../shaders/04.8.advanced_glsl.vert", "../shaders/04.8.advanced_glsl.frag");
+    Shader redShader("../uboExample/vertexShader.vert", "../uboExample/redShader.frag");
+    Shader greenShader("../uboExample/vertexShader.vert", "../uboExample/greenShader.frag");
+    Shader blueShader("../uboExample/vertexShader.vert", "../uboExample/blueShader.frag");
+    Shader yellowShader("../uboExample/vertexShader.vert", "../uboExample/yellowShader.frag");
+
+    // Uniform Buffers for global uniform objects.
+    unsigned int matricesUBO;
+    glGenBuffers(1, &matricesUBO);
+    glBindBuffer(GL_UNIFORM_BUFFER, matricesUBO);
+    glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+    // Bind the above uniform buffer to the binding point 0.
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, matricesUBO, 0, 2 * sizeof(glm::mat4));
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    // Getting the uniform block index of the Matrices Uniform Block.
+    unsigned int uniformBlockIndexRed = glGetUniformBlockIndex(redShader.ID, "Matrices");
+    unsigned int uniformBlockIndexGreen = glGetUniformBlockIndex(greenShader.ID, "Matrices");
+    unsigned int uniformBlockIndexBlue = glGetUniformBlockIndex(blueShader.ID, "Matrices");
+    unsigned int uniformBlockIndexYellow = glGetUniformBlockIndex(yellowShader.ID, "Matrices");
+
+    // Linking these blocks for all the shaders to the binding point 0.
+    // Binding Point 0 corresponds to the matricesUBO buffer we made earlier above.
+    glUniformBlockBinding(redShader.ID, uniformBlockIndexRed, 0);
+    glUniformBlockBinding(greenShader.ID, uniformBlockIndexGreen, 0);
+    glUniformBlockBinding(blueShader.ID, uniformBlockIndexBlue, 0);
+    glUniformBlockBinding(yellowShader.ID, uniformBlockIndexYellow, 0);
 
     // Cube VAO
     unsigned int cubeVBO, cubeVAO;
@@ -227,6 +252,8 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+    // Ability to change vertex point sizes in the vertex shader.
+    // glEnable(GL_PROGRAM_POINT_SIZE);
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -242,13 +269,39 @@ int main() {
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-        shader.use();
-        shader.setMat4f("view", 1, false, glm::value_ptr(view));
-        shader.setMat4f("projection", 1, false, glm::value_ptr(projection));
-        //cubes
-        shader.setMat4f("model", identity);
+        // Filling up the UBO Buffer.
+        glBindBuffer(GL_UNIFORM_BUFFER, matricesUBO);
+        glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+        glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
         glBindVertexArray(cubeVAO);
+
+        model = glm::translate(identity, glm::vec3(-0.75f, 0.75f, 0.0f));
+        redShader.use();
+        redShader.setMat4f("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        model = glm::translate(identity, glm::vec3( 0.75f, 0.75f, 0.0f));
+        greenShader.use();
+        greenShader.setMat4f("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        
+        model = glm::translate(identity, glm::vec3(-0.75f, -0.75f, 0.0f));
+        blueShader.use();
+        blueShader.setMat4f("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        model = glm::translate(identity, glm::vec3( 0.75f, -0.75f, 0.0f));
+        yellowShader.use();
+        yellowShader.setMat4f("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // shader.use();
+        // shader.setMat4f("view", 1, false, glm::value_ptr(view));
+        // shader.setMat4f("projection", 1, false, glm::value_ptr(projection));
+        //cubes
+        // shader.setMat4f("model", identity);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

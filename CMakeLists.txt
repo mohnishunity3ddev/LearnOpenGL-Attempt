@@ -118,19 +118,12 @@ add_subdirectory(src/Chapter03/03.1.MeshLoading)
 
 add_subdirectory(src/Chapter04/04.1.DepthTesting)
 add_subdirectory(src/Chapter04/04.2.StencilTesting)
-
 add_subdirectory(src/Chapter04/04.3.Blending)
-
 add_subdirectory(src/Chapter04/04.4.FaceCulling)
-
 add_subdirectory(src/Chapter04/04.5.Framebuffers)
-
 add_subdirectory(src/Chapter04/04.5.Framebuffers_Exercise01)
-
 add_subdirectory(src/Chapter04/04.6.Cubemaps)
-
 add_subdirectory(src/Chapter04/04.8.AdvancedGLSL)
-
 add_subdirectory(src/Chapter04/04.9.GeometryShader)
-
 add_subdirectory(src/Chapter04/04.9.1.GeometryShader_BuildHouse)
+add_subdirectory(src/Chapter04/04.9.2.GeometryShader_explodingObjects)

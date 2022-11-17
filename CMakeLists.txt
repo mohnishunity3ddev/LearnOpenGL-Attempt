@@ -132,3 +132,5 @@ add_subdirectory(src/Chapter04/04.6.Cubemaps)
 add_subdirectory(src/Chapter04/04.8.AdvancedGLSL)
 
 add_subdirectory(src/Chapter04/04.9.GeometryShader)
+
+add_subdirectory(src/Chapter04/04.9.1.GeometryShader_BuildHouse)

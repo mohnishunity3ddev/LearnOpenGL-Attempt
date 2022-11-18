@@ -15,7 +15,7 @@ class Model {
     std::vector<MeshTexture> textures_loaded;
 
 public:
-    Model(const char* path, bool isPathRelative = true);
+    Model(const char* path, bool isPathRelative = true, bool flipImage = true);
     void Draw(const Shader &shader);
 
 private:

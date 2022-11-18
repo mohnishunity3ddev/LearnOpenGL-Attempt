@@ -6,8 +6,12 @@
 
 #include <iostream>
 
-Model::Model(const char *path, bool isPathRelative) {
+Model::Model(const char *path, bool isPathRelative, bool flipImage) {
+    if(flipImage) {
+        stbi_set_flip_vertically_on_load(true);
+    }
     loadModel(path, isPathRelative);
+    stbi_set_flip_vertically_on_load(false);
 }
 
 void Model::Draw(const Shader &shader) {

@@ -203,7 +203,7 @@ int main() {
     }
 
     // Our Vertex and Fragment Shaders.
-    Shader shader("../shaders/04.8.advanced_glsl.vert", "../shaders/04.8.advanced_glsl.frag");
+    Shader shader("../shaders/template.vert", "../shaders/template.frag");
 
     // Cube VAO
     unsigned int cubeVBO, cubeVAO;

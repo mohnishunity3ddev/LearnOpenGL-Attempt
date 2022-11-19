@@ -132,3 +132,5 @@ add_subdirectory(src/Chapter04/4.10.Instancing)
 add_subdirectory(src/Chapter04/4.10.1.instancing_instanced_arrays)
 add_subdirectory(src/Chapter04/4.10.2.AsteroidField_NoInstancing)
 add_subdirectory(src/Chapter04/4.10.3.AsteroidField_WithInstancing)
+
+add_subdirectory(src/Chapter04/4.11.AntiAliasing)

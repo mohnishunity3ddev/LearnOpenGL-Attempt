@@ -134,3 +134,5 @@ add_subdirectory(src/Chapter04/4.10.2.AsteroidField_NoInstancing)
 add_subdirectory(src/Chapter04/4.10.3.AsteroidField_WithInstancing)
 
 add_subdirectory(src/Chapter04/4.11.AntiAliasing)
+
+add_subdirectory(src/Chapter04/4.11.1.AntiAliasing_OffScreen_MSAA)

@@ -30,7 +30,7 @@ public:
 
     Mesh(const std::vector<VertexAttribute> &vertices, const std::vector<unsigned int> &indices, const std::vector<MeshTexture> &textures);
     void Draw(const Shader& shader);
-
+    unsigned int getVAO() { return VAO; }
 private:
     // render data
     unsigned int VAO, VBO, EBO;

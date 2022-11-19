@@ -138,7 +138,8 @@ int main() {
     }
 
     // Our Vertex and Fragment Shaders.
-    Shader shader("../shaders/no_instancing_shader.vert", "../shaders/no_instancing_shader.frag");
+    Shader planetShader("../shaders/planet_shader.vert", "../shaders/planet_shader.frag");
+    Shader asteroidShader("../shaders/asteroid_shader_instanced.vert", "../shaders/asteroid_shader_instanced.frag");
 
     Model asteroidModel("asteroid_rock/rock.obj");
     Model planetModel("planet/planet.obj");
@@ -175,6 +176,40 @@ int main() {
         modelMatrices[i] = model;
     }
 
+    asteroidShader.use();
+    // VBO for holding instances model matrices
+    unsigned int instanceBuffer;
+    glGenBuffers(1, &instanceBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * amount, modelMatrices, GL_STATIC_DRAW);
+
+    for(unsigned int i = 0; i < asteroidModel.meshes.size(); ++i) {
+        unsigned int VAO = asteroidModel.meshes[i].getVAO();
+        glBindVertexArray(VAO);
+
+        // Setting instanced model matrices in asteroid shader for the third vertex attribute.
+        // Since vertex attributes can have a maximum size for that of a vec4. To send across a mat4,
+        // we make 4 vertex attributes each containing one vec4 to make a complete mat4 in the 
+        // vertex shader. Since Attribute 0,1,2 are being used by the assimp model. We use attribute
+        // indices 3, 4, 5, 6
+        size_t vec4Size = sizeof(glm::vec4);
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(1 * vec4Size));
+        glEnableVertexAttribArray(5);
+        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
+        glEnableVertexAttribArray(6);
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
+
+        // Making these instanced arrays.
+        glVertexAttribDivisor(3, 1);
+        glVertexAttribDivisor(4, 1);
+        glVertexAttribDivisor(5, 1);
+        glVertexAttribDivisor(6, 1);
+        glBindVertexArray(0);
+    }
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
@@ -191,19 +226,27 @@ int main() {
         glm::mat4 view = camera.getViewMatrix();
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
 
-        shader.use();
-        shader.setMat4f("view", view);
-        shader.setMat4f("projection", projection);
+        // Draw the center Planet.
+        planetShader.use();
+        planetShader.setMat4f("view", view);
+        planetShader.setMat4f("projection", projection);
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(4.0f));
-        shader.setMat4f("model", model);
-        planetModel.Draw(shader);
+        planetShader.setMat4f("model", model);
+        planetModel.Draw(planetShader);
 
-        for(unsigned int i = 0; i < amount; ++i) {
-            shader.setMat4f("model", modelMatrices[i]);
-            asteroidModel.Draw(shader);
+        // Draw the Asteroid Belt.
+        asteroidShader.use();
+        asteroidShader.setMat4f("view", view);
+        asteroidShader.setMat4f("projection", projection);
+        for(unsigned int i = 0; i < asteroidModel.meshes.size(); ++i) {
+            auto asteroidMesh = asteroidModel.meshes[i];
+            glBindVertexArray(asteroidMesh.getVAO());
+            // The second last argument here is the pointer to the index array.
+            // It can be set to zero(0) if the indices are bound in the Element Buffer Object in the VAO we have here.
+            glDrawElementsInstanced(GL_TRIANGLES, asteroidMesh.indices.size(), GL_UNSIGNED_INT, 0, amount);
         }
 
         glfwSwapBuffers(window);

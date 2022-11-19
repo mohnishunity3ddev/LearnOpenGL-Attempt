@@ -15,11 +15,11 @@ class Model {
     std::vector<MeshTexture> textures_loaded;
 
 public:
+    std::vector<Mesh> meshes;
     Model(const char* path, bool isPathRelative = true, bool flipImage = true);
     void Draw(const Shader &shader);
 
 private:
-    std::vector<Mesh> meshes;
     std::string directory;
 
     void loadModel(const std::string &path, bool isPathRelative);

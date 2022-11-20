@@ -72,6 +72,7 @@ set_property(TARGET assimp          PROPERTY FOLDER "ThirdPartyLibraries")
 # Include Common SharedUtils
 add_subdirectory(common)
 
+add_subdirectory(template)
 
 add_subdirectory(src/Chapter01/01.getting.started)
 add_subdirectory(src/Chapter01/01.1.getting.started.hello.window)
@@ -132,9 +133,8 @@ add_subdirectory(src/Chapter04/4.10.Instancing)
 add_subdirectory(src/Chapter04/4.10.1.instancing_instanced_arrays)
 add_subdirectory(src/Chapter04/4.10.2.AsteroidField_NoInstancing)
 add_subdirectory(src/Chapter04/4.10.3.AsteroidField_WithInstancing)
-
 add_subdirectory(src/Chapter04/4.11.AntiAliasing)
-
 add_subdirectory(src/Chapter04/4.11.1.AntiAliasing_OffScreen_MSAA)
 
 add_subdirectory(src/Chapter05/5.01.advanced_lighting)
+add_subdirectory(src/Chapter05/5.2.gamma_correction)

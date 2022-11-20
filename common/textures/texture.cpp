@@ -68,7 +68,7 @@ void Texture::createTextureAttachment(unsigned int width, unsigned int height) {
     glTextureParameteri(texture_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-Texture::Texture(const char *textureName, bool textureShouldWrap) { 
+Texture::Texture(const char *textureName, bool gamma, bool textureShouldWrap) { 
     texture_path = texture_dir_path;
     texture_path.append(textureName);
     glGenTextures(1, &texture_handle);
@@ -77,18 +77,21 @@ Texture::Texture(const char *textureName, bool textureShouldWrap) {
 
     pixelData = stbi_load(texture_path.c_str(), &width, &height, &nrChannels, 0);
     if(pixelData) {
-        GLenum format;
+        GLenum internalFormat;
+        GLenum dataFormat;
         if(nrChannels == 1) {
-            format = GL_RED;
+            internalFormat = dataFormat = GL_RED;
         } else if (nrChannels == 3) {
-            format = GL_RGB;
+            internalFormat = gamma ? GL_SRGB : GL_RGB;
+            dataFormat = GL_RGB;
         } else if(nrChannels == 4) {
-            format = GL_RGBA;
+            internalFormat = gamma ? GL_SRGB_ALPHA : GL_RGBA;
+            dataFormat = GL_RGBA;
         }
 
         this->texture_type = GL_TEXTURE_2D;
         glBindTexture(this->texture_type, texture_handle);
-        glTexImage2D(this->texture_type, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixelData);
+        glTexImage2D(this->texture_type, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, pixelData);
         glGenerateMipmap(this->texture_type);
 
         GLint wrapParam = textureShouldWrap ? GL_REPEAT : GL_CLAMP_TO_EDGE;

@@ -25,7 +25,7 @@ public:
             GLint minFilterMethod, GLint magFilterMethod, 
             bool useMipmap);
 
-    Texture(const char *textureName, bool textureShouldWrap = true);
+    Texture(const char *textureName, bool gamma = false, bool textureShouldWrap = true);
     Texture(unsigned int screenWidth, unsigned int screen);
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
@@ -45,10 +45,11 @@ public:
     int getHeight() const noexcept { return height; }
     int getChannels() const noexcept { return nrChannels; }
     static unsigned int loadCubemap(std::vector<std::string> faces);
+    
+    unsigned int texture_handle = UINT_MAX;
 private:
     unsigned char* pixelData = nullptr;
     std::string texture_path;
-    unsigned int texture_handle = UINT_MAX;
     GLenum texture_type; 
     int width = -1, height = -1, nrChannels = -1;
 

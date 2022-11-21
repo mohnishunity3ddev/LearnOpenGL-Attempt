@@ -138,7 +138,5 @@ add_subdirectory(src/Chapter04/4.11.1.AntiAliasing_OffScreen_MSAA)
 
 add_subdirectory(src/Chapter05/5.1.advanced_lighting)
 add_subdirectory(src/Chapter05/5.2.gamma_correction)
-
-add_subdirectory(src/Chapter05/5.3.shadow_mapping)
-
+add_subdirectory(src/Chapter05/5.3.0.shadow_mapping)
 add_subdirectory(src/Chapter05/5.3.1.shadow_mapping_rendering_shadows)

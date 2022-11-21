@@ -52,6 +52,7 @@ void renderScene(const Shader &shader)
 {
     // floor
     glm::mat4 model = glm::mat4(1.0f);
+    // model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
     shader.setMat4f("model", model);
     renderPlane();
     // cubes
@@ -197,6 +198,7 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+    glEnable(GL_CULL_FACE);
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -212,7 +214,7 @@ int main() {
 
         // First Pass. Render the scene from the light's point of view and store
         // the depth values in a texture
-        float near_plane = 1.0f, far_plane = 7.5f;
+        float near_plane = 1.0f, far_plane = 12.5f;
         // Since it is a directional light, all light rays are parallel to each other.
         // In such a case, we need to use orthographic matrix not a perspective one.
         glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
@@ -225,9 +227,19 @@ int main() {
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         // glEnable(GL_DEPTH_TEST);
         glClear(GL_DEPTH_BUFFER_BIT);
+            // NOTE: Peter Panning is the effect where the shadow is kind of
+            // detached by its corresponding object due to introduction of the
+            // shadow bias
+            // NOTE: The effect of peter panning CAN/MAY be fixed by culling the
+            // front faces when rendering the depth map.
+            // NOTE: And then switching back to culling back faces after the
+            // depth map rendering is done.
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_FRONT);
             depthPassShader.use();
             depthPassShader.setMat4f("lightSpaceMatrix", lightSpaceMatrix);
             renderScene(depthPassShader);
+            glDisable(GL_CULL_FACE);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);

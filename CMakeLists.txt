@@ -141,3 +141,7 @@ add_subdirectory(src/Chapter05/5.2.gamma_correction)
 add_subdirectory(src/Chapter05/5.3.0.shadow_mapping)
 add_subdirectory(src/Chapter05/5.3.1.shadow_mapping_rendering_shadows)
 add_subdirectory(src/Chapter05/5.3.2.shadow_mapping_shadowBias)
+
+add_subdirectory(src/Chapter05/5.3.3.shadow_mapping_peterPanning)
+
+add_subdirectory(src/Chapter05/5.3.4.shadow_mapping_OverSampling)

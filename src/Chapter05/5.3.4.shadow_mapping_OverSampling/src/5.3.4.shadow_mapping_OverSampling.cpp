@@ -178,8 +178,29 @@ int main() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // NOTE: OverSampling problem in shadow maps.
+    // The regions falling outside the light's view frustum are dark meaning
+    // those regions are considered to be in shadow.
+    // This happens because projected coordinates outside the light's frustum
+    // are higher than 1.0 and will thus sample the depth texture outside its
+    // default range of [0,1]. Based on the texture's wrapping method, we will
+    // get incorrect depth results not based on the real depth values from the
+    // light source.
+
+    // NOTE: SOLUTION to the OverSampling Problem
+    // What we'd rather have is that all coordinates outside the depth map's
+    // range have a depth of 1.0 which as a result means these coordinates will
+    // never be in shadow (as no object will have a depth larger than 1.0). We
+    // can do this by configuring a texture border color and set the depth map's
+    // texture wrap options to GL_CLAMP_TO_BORDER:
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    // NOTE: Now whenever we sample outside the depth map's [0,1] coordinate
+    // range, the texture function will always return a depth of 1.0, producing
+    // a shadow value of 0.0
+    
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
     // For shadow mapping we only need a depth value, not color buffer. But we almost always need a color buffer.

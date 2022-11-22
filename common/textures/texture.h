@@ -44,9 +44,10 @@ public:
     int getWidth() const noexcept { return width; }
     int getHeight() const noexcept { return height; }
     int getChannels() const noexcept { return nrChannels; }
-    static unsigned int loadCubemap(std::vector<std::string> faces);
-    
     unsigned int texture_handle = UINT_MAX;
+
+    static unsigned int loadCubemap(std::vector<std::string> faces, bool createDefaultCubemap = false);
+    static void createDefaultTexture(unsigned int width, unsigned int height, GLint format, unsigned int *texture);
 private:
     unsigned char* pixelData = nullptr;
     std::string texture_path;

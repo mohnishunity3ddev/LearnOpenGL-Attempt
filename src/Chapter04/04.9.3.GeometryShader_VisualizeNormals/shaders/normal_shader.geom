@@ -21,6 +21,6 @@ void generateLine(int index) {
 
 void main() {    
     generateLine(0);
-    // generateLine(1);
-    // generateLine(2);
+    generateLine(1);
+    generateLine(2);
 }  

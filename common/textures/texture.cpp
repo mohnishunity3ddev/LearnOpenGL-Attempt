@@ -124,7 +124,20 @@ Texture::~Texture() {
     }
 }
 
-unsigned int Texture::loadCubemap(std::vector<std::string> faces) {
+unsigned int Texture::loadCubemap(std::vector<std::string> faces, bool createDefaultCubemap) {
+    if(createDefaultCubemap) {
+        faces = std::vector<std::string> {
+            "skybox/right.jpg",
+            "skybox/left.jpg",
+            "skybox/top.jpg",
+            "skybox/bottom.jpg",
+            "skybox/front.jpg",
+            "skybox/back.jpg"
+        };
+    }
+
+    stbi_set_flip_vertically_on_load(false);
+    
     unsigned int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -155,5 +168,16 @@ unsigned int Texture::loadCubemap(std::vector<std::string> faces) {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
+    stbi_set_flip_vertically_on_load(true);
     return textureID;
+}
+
+void Texture::createDefaultTexture(unsigned int width, unsigned int height, GLint format, unsigned int *texture) {
+    glGenTextures(1, texture);
+    glBindTexture(GL_TEXTURE_2D, *texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }

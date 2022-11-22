@@ -145,3 +145,5 @@ add_subdirectory(src/Chapter05/5.3.3.shadow_mapping_peterPanning)
 add_subdirectory(src/Chapter05/5.3.4.shadow_mapping_OverSampling)
 add_subdirectory(src/Chapter05/5.3.5.shadow_mapping_PCFBlurring)
 add_subdirectory(src/Chapter05/5.4.0.omnidirectional_shadows_mapping_debug)
+
+add_subdirectory(src/Chapter05/5.4.1.omni_shadow_mapping)

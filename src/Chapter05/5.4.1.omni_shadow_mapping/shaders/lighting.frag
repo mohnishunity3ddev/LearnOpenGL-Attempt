@@ -15,7 +15,7 @@ uniform vec3 viewPos;
 
 uniform float far_plane;
 
-float ShadowCalculation(vec3 fragPos) {
+float ShadowCalculation(vec3 fragPos, float bias) {
     vec3 fragToLight = (fragPos - lightPos); // no need to normalize this.
     float closestDepth = texture(depthMap, fragToLight).r;
 
@@ -24,7 +24,6 @@ float ShadowCalculation(vec3 fragPos) {
 
     float currentDepth = length(fragToLight);
 
-    float bias = 0.015;
     float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
     return shadow;
 }
@@ -46,7 +45,8 @@ void main() {
     float spec = pow(max(dot(halfwayDir, normal), 0.0), 64);
     vec3 specular = spec * lightColor;
 
-    float shadow = ShadowCalculation(fs_in.FragPos);
+    float shadowBias = max(0.05 * (1.0 - max(dot(lightDir, normal), 0.0)), 0.005);
+    float shadow = ShadowCalculation(fs_in.FragPos, shadowBias);
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 
     FragColor = vec4(lighting, 1.0);

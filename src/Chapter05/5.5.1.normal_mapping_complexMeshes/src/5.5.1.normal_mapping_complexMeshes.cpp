@@ -28,8 +28,8 @@ void renderPlane();
 void renderSkybox();
 
 // settings
-const unsigned int SCR_WIDTH = 1600;
-const unsigned int SCR_HEIGHT = 900;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -150,18 +150,18 @@ int main() {
 
     // Our Vertex and Fragment Shaders.
     Shader shader("../shaders/normal_mapping.vert", "../shaders/normal_mapping.frag");
-    Model cyborgModel("cyborg/cyborg.obj");
+    Model cyborgModel("nanosuit/nanosuit.obj");
 
     DirectionalLight directionalLight {
-        .direction = glm::vec3(-0.0f, -1.0f, -1.0f),
+        .direction = glm::vec3(0.0f, -0.0f, -1.0f),
         .color = glm::vec3(1.0f),
         .ambientFactor = 0.1f,
-        .diffuseFactor = 1.0f,
+        .diffuseFactor = 1.5f,
         .specularFactor = 1.0f
     };
 
     shader.use();
-    shader.setFloat("shininess", 64);
+    shader.setFloat("shininess", 512);
     directionalLight.setShaderData(shader);
 
     glm::mat4 identity = glm::mat4(1.0f);

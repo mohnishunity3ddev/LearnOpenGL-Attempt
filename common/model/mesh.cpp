@@ -34,6 +34,9 @@ void Mesh::setupMesh() {
     // Tangent attribute.
     glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAttribute), (void*)offsetof(VertexAttribute, tangent));
+    // BiTangent attribute
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAttribute), (void*)offsetof(VertexAttribute, bitangent));
 
     glBindVertexArray(0);
 }

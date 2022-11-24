@@ -92,6 +92,12 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         tempVec.z = mesh->mTangents[i].z;
         vertex.tangent = tempVec;
 
+        // BiTangents for TBN Matrix
+        tempVec.x = mesh->mBitangents[i].x;
+        tempVec.y = mesh->mBitangents[i].y;
+        tempVec.z = mesh->mBitangents[i].z;
+        vertex.bitangent = tempVec;
+
         vertices.push_back(vertex);
     }
 

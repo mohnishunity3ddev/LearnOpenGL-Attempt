@@ -29,12 +29,12 @@ uniform Material material;
 
 void main() {
     vec3 color          = texture(material.texture_diffuse1, fs_in.TexCoords).rgb;
-    vec3 normalTex      = texture(material.texture_normal1, fs_in.TexCoords).rgb;
+    vec3 normalTex      = normalize(texture(material.texture_normal1, fs_in.TexCoords).rgb);
     float specularTex   = texture(material.texture_specular1, fs_in.TexCoords).r;
 
-    vec3 normal     = normalTex * 2.0 - 1.0;
-         normal     = normalize(fs_in.TBN * normal);
-         
+    vec3 normal = normalTex * 2.0 - 1.0;
+         normal = normalize(fs_in.TBN * normal);
+    
     vec3 lightDir   = normalize(directional_light.direction);
 
     vec3 lightAmbient   = directional_light.color * directional_light.ambientFactor;
@@ -52,7 +52,7 @@ void main() {
     vec3 viewDir    = normalize(viewPos - fs_in.FragPos);
     vec3 halfwayDir = normalize(viewDir + (-lightDir));
     float spec      = pow(max(dot(halfwayDir, normal), 0.0), shininess) * specularTex;
-    vec3 specular   = spec * lightSpecular * color;
+    vec3 specular   = spec * lightSpecular;
 
     vec3 lighting   = ambient + diffuse + specular;
 

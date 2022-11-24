@@ -31,6 +31,9 @@ void Mesh::setupMesh() {
     // Texture Coordinate attribute
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexAttribute), (void*)offsetof(VertexAttribute, texCoords));
+    // Tangent attribute.
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAttribute), (void*)offsetof(VertexAttribute, tangent));
 
     glBindVertexArray(0);
 }
@@ -38,6 +41,7 @@ void Mesh::setupMesh() {
 void Mesh::Draw(const Shader& shader) {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
+    unsigned int normalNr = 1;
     for (unsigned int i = 0; i < textures.size(); ++i) {
         glActiveTexture(GL_TEXTURE0 + i);
         std::string number;
@@ -46,6 +50,8 @@ void Mesh::Draw(const Shader& shader) {
             number = std::to_string(diffuseNr++);
         } else if(name == "texture_specular") {
             number = std::to_string(specularNr++);
+        } else if(name == "texture_normal") {
+            number = std::to_string(normalNr++);
         }
 
         shader.setInt(("material." + name + number).c_str(), i);
@@ -56,5 +62,6 @@ void Mesh::Draw(const Shader& shader) {
     // draw mesh
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    // glDrawArrays(GL_TRIANGLES, 0, vertices.size());
     glBindVertexArray(0);
 }

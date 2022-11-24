@@ -25,7 +25,7 @@ public:
             GLint minFilterMethod, GLint magFilterMethod, 
             bool useMipmap);
 
-    Texture(const char *textureName, bool gamma = false, bool textureShouldWrap = true);
+    Texture(const char *textureName, bool flipImage = true, bool gamma = false, bool textureShouldWrap = true);
     Texture(unsigned int screenWidth, unsigned int screen);
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;

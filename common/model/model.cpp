@@ -27,7 +27,7 @@ void Model::loadModel(const std::string &path, bool isPathRelative) {
     }
 
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << "\n";
@@ -62,7 +62,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     for(unsigned int i = 0; i < mesh->mNumVertices; ++i) {
         VertexAttribute vertex;
 
-
         // Vertex Positions
         glm::vec3 tempVec;
         tempVec.x = mesh->mVertices[i].x;
@@ -87,6 +86,11 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
             vertex.texCoords = glm::vec2(0.0f, 0.0f);
         }
 
+        // Tangents for TBN Matrix.
+        tempVec.x = mesh->mTangents[i].x;
+        tempVec.y = mesh->mTangents[i].y;
+        tempVec.z = mesh->mTangents[i].z;
+        vertex.tangent = tempVec;
 
         vertices.push_back(vertex);
     }
@@ -111,6 +115,9 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
 
         std::vector<MeshTexture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+        std::vector<MeshTexture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+        textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
     }
 
     return Mesh(vertices, indices, textures);

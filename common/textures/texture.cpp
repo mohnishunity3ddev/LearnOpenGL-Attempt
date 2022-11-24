@@ -68,12 +68,13 @@ void Texture::createTextureAttachment(unsigned int width, unsigned int height) {
     glTextureParameteri(texture_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-Texture::Texture(const char *textureName, bool gamma, bool textureShouldWrap) { 
+Texture::Texture(const char *textureName, bool flipImage, bool gamma, bool textureShouldWrap) { 
     texture_path = texture_dir_path;
     texture_path.append(textureName);
     glGenTextures(1, &texture_handle);
 
-    stbi_set_flip_vertically_on_load(true);
+    if(flipImage)
+        stbi_set_flip_vertically_on_load(true);
 
     pixelData = stbi_load(texture_path.c_str(), &width, &height, &nrChannels, 0);
     if(pixelData) {
@@ -105,6 +106,8 @@ Texture::Texture(const char *textureName, bool gamma, bool textureShouldWrap) {
         stbi_image_free(pixelData);
         pixelData = 0;
     }
+    if(flipImage)
+        stbi_set_flip_vertically_on_load(true);
 }
 
 void Texture::bindToTextureUnit(unsigned int textureUnit) const {

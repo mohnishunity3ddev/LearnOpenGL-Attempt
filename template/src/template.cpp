@@ -23,75 +23,7 @@ void processInput(GLFWwindow *window);
 void renderCube();
 void renderQuad();
 void renderPlane();
-
-glm::vec3 cubePositions[] = {
-    glm::vec3( 0.0f,  0.0f,  0.0f), 
-    glm::vec3( 2.0f,  5.0f, -15.0f), 
-    glm::vec3(-1.5f, -2.2f, -2.5f),  
-    glm::vec3(-3.8f, -2.0f, -12.3f),  
-    glm::vec3( 2.4f, -0.4f, -3.5f),  
-    glm::vec3(-1.7f,  3.0f, -7.5f),  
-    glm::vec3( 1.3f, -2.0f, -2.5f),  
-    glm::vec3( 1.5f,  2.0f, -2.5f), 
-    glm::vec3( 1.5f,  0.2f, -1.5f), 
-    glm::vec3(-1.3f,  1.0f, -1.5f)  
-};
-
-glm::vec3 cubeColors[JARRAY_SIZE(cubePositions)];
-
-float planeVertices[] = {
-    // positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
-     5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-    -5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
-    -5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-
-     5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-    -5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-     5.0f, -0.5f, -5.0f,  2.0f, 2.0f								
-};
-
-float cubeVertices[] = {
-    // Positions            // TexCoords  // Normals
-    -0.5f, -0.5f, -0.5f,    0.0f, 0.0f,   0.0f,  0.0f, -1.0f,  
-     0.5f, -0.5f, -0.5f,    1.0f, 0.0f,   0.0f,  0.0f, -1.0f,  
-     0.5f,  0.5f, -0.5f,    1.0f, 1.0f,   0.0f,  0.0f, -1.0f,  
-     0.5f,  0.5f, -0.5f,    1.0f, 1.0f,   0.0f,  0.0f, -1.0f,  
-    -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,   0.0f,  0.0f, -1.0f,  
-    -0.5f, -0.5f, -0.5f,    0.0f, 0.0f,   0.0f,  0.0f, -1.0f,  
-
-    -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,   0.0f,  0.0f, 1.0f,   
-     0.5f, -0.5f,  0.5f,    1.0f, 0.0f,   0.0f,  0.0f, 1.0f,   
-     0.5f,  0.5f,  0.5f,    1.0f, 1.0f,   0.0f,  0.0f, 1.0f,   
-     0.5f,  0.5f,  0.5f,    1.0f, 1.0f,   0.0f,  0.0f, 1.0f,   
-    -0.5f,  0.5f,  0.5f,    0.0f, 1.0f,   0.0f,  0.0f, 1.0f,   
-    -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,   0.0f,  0.0f, 1.0f,   
-
-    -0.5f,  0.5f,  0.5f,    1.0f, 0.0f,  -1.0f,  0.0f,  0.0f,  
-    -0.5f,  0.5f, -0.5f,    1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,  
-    -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,  -1.0f,  0.0f,  0.0f,  
-    -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,  -1.0f,  0.0f,  0.0f,  
-    -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,  
-    -0.5f,  0.5f,  0.5f,    1.0f, 0.0f,  -1.0f,  0.0f,  0.0f,  
-     0.5f,  0.5f,  0.5f,    1.0f, 0.0f,   1.0f,  0.0f,  0.0f,  
-     0.5f,  0.5f, -0.5f,    1.0f, 1.0f,   1.0f,  0.0f,  0.0f,  
-     0.5f, -0.5f, -0.5f,    0.0f, 1.0f,   1.0f,  0.0f,  0.0f,  
-     0.5f, -0.5f, -0.5f,    0.0f, 1.0f,   1.0f,  0.0f,  0.0f,  
-     0.5f, -0.5f,  0.5f,    0.0f, 0.0f,   1.0f,  0.0f,  0.0f,  
-     0.5f,  0.5f,  0.5f,    1.0f, 0.0f,   1.0f,  0.0f,  0.0f,  
-    -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,   0.0f, -1.0f,  0.0f,  
-     0.5f, -0.5f, -0.5f,    1.0f, 1.0f,   0.0f, -1.0f,  0.0f,  
-     0.5f, -0.5f,  0.5f,    1.0f, 0.0f,   0.0f, -1.0f,  0.0f,  
-     0.5f, -0.5f,  0.5f,    1.0f, 0.0f,   0.0f, -1.0f,  0.0f,  
-    -0.5f, -0.5f,  0.5f,    0.0f, 0.0f,   0.0f, -1.0f,  0.0f,  
-    -0.5f, -0.5f, -0.5f,    0.0f, 1.0f,   0.0f, -1.0f,  0.0f,  
-    -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,   0.0f,  1.0f,  0.0f,  
-     0.5f,  0.5f, -0.5f,    1.0f, 1.0f,   0.0f,  1.0f,  0.0f,  
-     0.5f,  0.5f,  0.5f,    1.0f, 0.0f,   0.0f,  1.0f,  0.0f,  
-     0.5f,  0.5f,  0.5f,    1.0f, 0.0f,   0.0f,  1.0f,  0.0f,  
-    -0.5f,  0.5f,  0.5f,    0.0f, 0.0f,   0.0f,  1.0f,  0.0f,  
-    -0.5f,  0.5f, -0.5f,    0.0f, 1.0f,   0.0f,  1.0f,  0.0f
-};
-
+void renderSkybox();
 
 // settings
 const unsigned int SCR_WIDTH = 1600;
@@ -106,15 +38,6 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
-
-// Light
-glm::vec3 yellowColor = glm::vec3(1.0f, 1.0f, 0.0f);
-glm::vec3 whiteColor = glm::vec3(1.0f);
-
-glm::vec3 lightColor = glm::vec3(1.0f);
-// glm::vec3 lightPosition = glm::vec3(-2.0f, 2.0f, 5.0f);
-glm::vec3 lightDirection = glm::vec3(-0.2f, -1.0f, -0.3f);
-
 
 void APIENTRY glDebugOutput(GLenum source, 
                             GLenum type, 
@@ -428,5 +351,70 @@ void renderPlane() {
 
     glBindVertexArray(planeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+}
+
+
+unsigned int skyboxVAO = 0, skyboxVBO = 0;
+void renderSkybox() {
+    // Skybox VAO
+    if(skyboxVAO == 0) {
+
+        float skyboxVertices[] = {
+            // positions          
+            -1.0f,  1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+             1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+
+             1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+
+            -1.0f, -1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+
+            -1.0f,  1.0f, -1.0f,
+             1.0f,  1.0f, -1.0f,
+             1.0f,  1.0f,  1.0f,
+             1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+             1.0f, -1.0f, -1.0f,
+             1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+             1.0f, -1.0f,  1.0f
+        };
+
+        glGenVertexArrays(1, &skyboxVAO);
+        glGenBuffers(1, &skyboxVBO);
+        glBindVertexArray(skyboxVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), 0);
+        glEnableVertexAttribArray(0);
+        glBindVertexArray(0);
+    }
+    glBindVertexArray(skyboxVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
 }

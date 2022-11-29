@@ -150,7 +150,7 @@ int main() {
 
     // Our Vertex and Fragment Shaders.
     Shader shader("../shaders/normal_mapping.vert", "../shaders/normal_mapping.frag");
-    Model cyborgModel("cyborg/cyborg.obj");
+    Model cyborgModel("nanosuit/nanosuit.obj");
 
     DirectionalLight directionalLight {
         .direction = glm::vec3(1.0f, -1.0f, -1.0f),
@@ -169,9 +169,9 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    glm::mat3 m = glm::mat3(glm::vec3(0, 1, 0), glm::vec3(0, 0, 1), glm::vec3(1, 0, 0));
-    glm::vec3 v = glm::vec3(0, 1, 0);
-    glm::vec3 r = m * glm::vec3(0, 1, 0);
+    // glm::mat3 m = glm::mat3(glm::vec3(0, 1, 0), glm::vec3(0, 0, 1), glm::vec3(1, 0, 0));
+    // glm::vec3 v = glm::vec3(0, 1, 0);
+    // glm::vec3 r = m * glm::vec3(0, 1, 0);
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());

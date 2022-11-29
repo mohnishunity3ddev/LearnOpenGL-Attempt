@@ -67,5 +67,5 @@ void main() {
     vec3 r = m * vec3(0, 1, 0);
 
     
-    FragColor = vec4(r, 1.0);
+    FragColor = vec4(lighting, 1.0);
 }

@@ -4,5 +4,6 @@
 const char* const project_path = "@CMAKE_SOURCE_DIR@/";
 const char* const texture_dir_path = "@CMAKE_SOURCE_DIR@/resources/textures/";
 const char* const models_dir_path = "@CMAKE_SOURCE_DIR@/resources/models/";
+const char* const fonts_dir_path = "@CMAKE_SOURCE_DIR@/resources/fonts/";
 
 #endif

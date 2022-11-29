@@ -25,14 +25,17 @@ uniform DirectionalLight directional_light;
 uniform vec3 viewPos;
 uniform float shininess;
 uniform Material material;
+uniform mat4 temp;
 
 
 void main() {
     vec3 color          = texture(material.texture_diffuse1, fs_in.TexCoords).rgb;
-    vec3 normalTex      = normalize(texture(material.texture_normal1, fs_in.TexCoords).rgb);
+    vec3 normalTex      = texture(material.texture_normal1, fs_in.TexCoords).rgb;
     float specularTex   = texture(material.texture_specular1, fs_in.TexCoords).r;
 
-    vec3 normal = normalTex * 2.0 - 1.0;
+    normalTex = normalize(normalTex);
+
+    vec3 normal = normalize(normalTex * 2.0 - 1.0);
          normal = normalize(fs_in.TBN * normal);
     
     vec3 lightDir   = normalize(directional_light.direction);
@@ -51,10 +54,18 @@ void main() {
     // specular
     vec3 viewDir    = normalize(viewPos - fs_in.FragPos);
     vec3 halfwayDir = normalize(viewDir + (-lightDir));
-    float spec      = pow(max(dot(halfwayDir, normal), 0.0), shininess) * specularTex;
+    float spec      = pow(max(dot(halfwayDir, normal), 0.0), 512) * specularTex;
     vec3 specular   = spec * lightSpecular;
 
     vec3 lighting   = ambient + diffuse + specular;
 
-    FragColor = vec4(lighting, 1.0);
+    vec4 t = temp[3];
+
+
+
+    mat3 m = mat3(vec3(0, 1, 0), vec3(0, 0, 1), vec3(1, 0, 0));
+    vec3 r = m * vec3(0, 1, 0);
+
+    
+    FragColor = vec4(r, 1.0);
 }

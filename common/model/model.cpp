@@ -2,16 +2,12 @@
 #include <project_paths.h>
 
 #include <glm/glm.hpp>
-#include <helpers.h>
+#include <textures/texture.h>
 
 #include <iostream>
 
 Model::Model(const char *path, bool isPathRelative, bool flipImage) {
-    if(flipImage) {
-        stbi_set_flip_vertically_on_load(true);
-    }
     loadModel(path, isPathRelative);
-    stbi_set_flip_vertically_on_load(false);
 }
 
 void Model::Draw(const Shader &shader) {
@@ -149,7 +145,8 @@ std::vector<MeshTexture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureT
         if(!skip) {
             // If this is a new texture which has not been loaded.
             MeshTexture texture;
-            texture.id = TextureFromFile(str.C_Str(), directory);
+            bool isSRGBTexture = type == aiTextureType::aiTextureType_DIFFUSE;
+            texture.id = Texture::TextureFromFile(str.C_Str(), directory);
             texture.type = typeName;
             texture.path = str.C_Str();
             textures.push_back(texture);

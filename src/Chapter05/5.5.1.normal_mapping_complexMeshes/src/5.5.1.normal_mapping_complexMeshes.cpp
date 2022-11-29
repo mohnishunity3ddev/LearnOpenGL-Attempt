@@ -150,14 +150,14 @@ int main() {
 
     // Our Vertex and Fragment Shaders.
     Shader shader("../shaders/normal_mapping.vert", "../shaders/normal_mapping.frag");
-    Model cyborgModel("nanosuit/nanosuit.obj");
+    Model cyborgModel("cyborg/cyborg.obj");
 
     DirectionalLight directionalLight {
-        .direction = glm::vec3(0.0f, -0.0f, -1.0f),
+        .direction = glm::vec3(1.0f, -1.0f, -1.0f),
         .color = glm::vec3(1.0f),
         .ambientFactor = 0.1f,
-        .diffuseFactor = 1.5f,
-        .specularFactor = 1.0f
+        .diffuseFactor = 1.0f,
+        .specularFactor = 0.3f
     };
 
     shader.use();
@@ -169,7 +169,9 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    PrimitiveMesh* primitiveFactory = PrimitiveMesh::GetInstance();
+    glm::mat3 m = glm::mat3(glm::vec3(0, 1, 0), glm::vec3(0, 0, 1), glm::vec3(1, 0, 0));
+    glm::vec3 v = glm::vec3(0, 1, 0);
+    glm::vec3 r = m * glm::vec3(0, 1, 0);
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -188,8 +190,7 @@ int main() {
         shader.use();
         shader.setMat4f("view", 1, false, glm::value_ptr(view));
         shader.setMat4f("projection", 1, false, glm::value_ptr(projection));
-        model = identity;
-        shader.setMat4f("model", model);    
+        shader.setMat4f("model", identity);    
         shader.setVec3("viewPos", glm::value_ptr(camera.Position));
         cyborgModel.Draw(shader);
 

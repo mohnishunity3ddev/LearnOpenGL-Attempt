@@ -197,6 +197,7 @@ int main() {
         // model = glm::rotate(identity, (float)glfwGetTime() * 0.1f, glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
         shader.setMat4f("model", identity);    
         shader.setVec3("viewPos", glm::value_ptr(camera.Position));
+        shader.setVec3("lightDirection", glm::value_ptr(directionalLight.direction));
         primitiveFactory->RenderCube();
 
         glfwSwapBuffers(window);

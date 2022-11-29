@@ -149,3 +149,7 @@ add_subdirectory(src/Chapter05/5.4.1.omni_shadow_mapping)
 add_subdirectory(src/Chapter05/5.4.2.omni_shadow_mapping_soft)
 add_subdirectory(src/Chapter05/5.5.0.normal_mapping)
 add_subdirectory(src/Chapter05/5.5.1.normal_mapping_complexMeshes)
+add_subdirectory(src/Chapter05/5.6.0.parallax_mapping)
+add_subdirectory(src/Chapter05/5.5.2.normal_mapping_tangent_space)
+
+add_subdirectory(src/Chapter07/7.1.0.text_rendering)

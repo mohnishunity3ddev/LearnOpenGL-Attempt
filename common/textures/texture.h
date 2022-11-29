@@ -26,6 +26,7 @@ public:
             bool useMipmap);
 
     Texture(const char *textureName, bool flipImage = true, bool gamma = false, bool textureShouldWrap = true);
+    static unsigned int TextureFromFile(const char* path, const std::string &directory, bool gamma = false);
     Texture(unsigned int screenWidth, unsigned int screen);
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;

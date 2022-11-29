@@ -9,12 +9,18 @@ layout(location = 4) in vec3 aBitangent;
 out VS_OUT {
     vec2 TexCoords;
     vec3 FragPos;
-    mat3 TBN;
+    vec3 TangentViewPos;
+    vec3 TangentFragPos;
 } vs_out;
+
+flat out vec3 TangentLightDirection;
 
 uniform mat4 model;                                                                                                                                
 uniform mat4 projection;
 uniform mat4 view;
+
+uniform vec3 viewPos;
+uniform vec3 lightDirection;
 
 void main() {
     vs_out.TexCoords = aTexCoords;
@@ -32,6 +38,16 @@ void main() {
         T = T * -1.0;
     }
 
-    vs_out.TBN = mat3(T, B, N);
+    // Matrix to transform positions from tangent-space to world space.
+    // mat3 TBN = mat3(T, B, N);
+
+    // Matrix to transform positions from world space to tangent-space.
+    // which is basically inverse of the TBN matrix.
+    // Inverse of an orthognal matrix(each row is a unit vector and orthogonal to each other) is its transpose.
+    mat3 TBN = transpose(mat3(T, B, N));
+
+    TangentLightDirection = TBN * lightDirection;
+    vs_out.TangentViewPos = TBN * viewPos;
+    vs_out.TangentFragPos = TBN * vs_out.FragPos; 
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

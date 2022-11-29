@@ -21,11 +21,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
-void renderCube();
-void renderQuad();
-void renderPlane();
-void renderSkybox();
-
 // settings
 const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 900;
@@ -86,23 +81,6 @@ void APIENTRY glDebugOutput(GLenum source,
     std::cout << std::endl;
 }
 
-struct DirectionalLight {
-    glm::vec3 direction;
-    glm::vec3 color;
-    float ambientFactor;
-    float diffuseFactor;
-    float specularFactor;
-
-    void setShaderData(const Shader& shader) {
-        shader.use();
-        shader.setVec3("directional_light.direction", glm::value_ptr(direction));
-        shader.setVec3("directional_light.color", glm::value_ptr(color));
-        shader.setFloat("directional_light.ambientFactor", ambientFactor);
-        shader.setFloat("directional_light.diffuseFactor", diffuseFactor);
-        shader.setFloat("directional_light.specularFactor", specularFactor);
-    }
-};
-
 int main() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -148,34 +126,27 @@ int main() {
     }
 
     // Our Vertex and Fragment Shaders.
-    Shader shader("../shaders/normal_mapping.vert", "../shaders/normal_mapping.frag");
+    Shader shader("../shaders/parallax_mapping.vert", "../shaders/parallax_mapping.frag");
 
-    Texture brickTexture("brickwall.jpg");
-    Texture normalTexture("brickwall_normal.jpg");
-
-    DirectionalLight directionalLight {
-        .direction      = glm::vec3(0.0f, 0.0f, -1.0f),
-        .color          = glm::vec3(1.0f),
-        .ambientFactor  = 0.10f,
-        .diffuseFactor  = 1.00f,
-        .specularFactor = 0.20f
-    };
-
-    brickTexture.bindToTextureUnit(0);
-    normalTexture.bindToTextureUnit(1);
+    Texture normalMap("bricks2_normal.jpg");
+    Texture displacementMap("bricks2_disp.jpg");
+    Texture diffuseMap("bricks2.jpg", true, true);
 
     shader.use();
-    shader.setInt("diffuseTexture", 0);
-    shader.setInt("normalTexture", 1);
-    shader.setFloat("shininess", 64);
-    directionalLight.setShaderData(shader);
+    diffuseMap.bindToTextureUnit(0);
+    normalMap.bindToTextureUnit(1);
+    displacementMap.bindToTextureUnit(2);
+    shader.setInt("diffuseMap", 0);
+    shader.setInt("normalMap", 1);
+    shader.setInt("displacementMap", 2);
+
 
     glm::mat4 identity = glm::mat4(1.0f);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    PrimitiveMesh* primitiveFactory = PrimitiveMesh::GetInstance();
+    PrimitiveMesh* mesh = PrimitiveMesh::GetInstance();
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -194,10 +165,9 @@ int main() {
         shader.use();
         shader.setMat4f("view", 1, false, glm::value_ptr(view));
         shader.setMat4f("projection", 1, false, glm::value_ptr(projection));
-        // model = glm::rotate(identity, (float)glfwGetTime() * 0.1f, glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
-        shader.setMat4f("model", identity);    
-        shader.setVec3("viewPos", glm::value_ptr(camera.Position));
-        primitiveFactory->RenderCube();
+        //cubes
+        shader.setMat4f("model", identity);
+        mesh->RenderQuad();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

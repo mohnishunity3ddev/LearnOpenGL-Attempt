@@ -51,6 +51,22 @@ add_subdirectory(external/assimp)
 set(GLAD_SOURCES external/glad/src/glad.c)
 add_library(glad ${GLAD_SOURCES})
 
+# FreeType stuff for font rendering
+set(FREETYPE_LIB_PATH "")
+if(USE_DEBUG)
+  list(APPEND FREETYPE_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/freetype2/build/Debug)
+else()
+  list(APPEND FREETYPE_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external/freetype2/build/Release)
+endif()
+message(STATUS "looking for freetype in ${FREETYPE_LIB_PATH}")
+# include(FindPackageHandleStandardArgs)
+find_library(freetype NAMES freetype freetyped PATHS ${FREETYPE_LIB_PATH} PATH_SUFFIXES lib)
+if(NOT freetype)
+  message(FATAL_ERROR "freetype - not found.")
+else()
+  message("freetype - found at path ${freetype}")
+endif()
+
 # Include Directories ...
 include_directories(external/glfw/include)
 include_directories(external/glm)
@@ -59,6 +75,7 @@ include_directories(external/stb)
 include_directories(external/assimp/include)
 include_directories($<TARGET_FILE_DIR:assimp>/../include) # there is one config.h file which gets build in assimp's build directory by cmake.
 include_directories(external/imgui)
+include_directories(external/freetype2/include)
 include_directories(common)
 
 if(WIN32)

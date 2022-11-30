@@ -28,7 +28,7 @@ void processInput(GLFWwindow *window);
 
 void loadCharacterGlyphs(const FT_Face& face);
 void renderText(Shader &s, std::string text, float x, float y, float scale, glm::vec3 color);
-void renderText(const Shader& shader, const char* text, float x, float y, bool isDebug);
+void renderText(const Shader& shader, const char* text, float x, float y, float scale, bool isDebug);
 void loadGlyphsAtlas(const FT_Face& face, GLuint& fontAtlas, unsigned int atlasSize = 512);
 
 // settings
@@ -233,8 +233,8 @@ int main() {
         shader.setMat4f("projection", projection);
         shader.setMat4f("view", view);
         shader.setMat4f("model", model);
-        renderText(shader, "Hello! I am Mohnish[Mani}! The jacked up KingKong OG Bb", SCR_WIDTH * 0.01f, SCR_HEIGHT * 0.25f, false);
-        renderText(shader, "A", 0.0f, SCR_HEIGHT * 0.5f, true);
+        renderText(shader, "Hello! I am Mohnish[Mani}! The jacked up KingKong OG Bb", SCR_WIDTH * 0.01f, SCR_HEIGHT * 0.25f, 1.0f, false);
+        renderText(shader, "A", 0.0f, SCR_HEIGHT * 0.5f, 1.0f, true);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -367,7 +367,7 @@ void renderText(Shader &s, std::string text, float x, float y, float scale, glm:
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void renderText(const Shader& shader, const char* text, float x, float y, bool isDebug) {
+void renderText(const Shader& shader, const char* text, float x, float y, float scale, bool isDebug) {
     shader.use();
     glBindVertexArray(VAO);
 
@@ -387,14 +387,14 @@ void renderText(const Shader& shader, const char* text, float x, float y, bool i
         } else {
             tx = ac[*p].texcoords.x;
             ty = ac[*p].texcoords.y;
-            sx = ac[*p].size.x;
-            sy = ac[*p].size.y;
+            sx = ac[*p].size.x * scale;
+            sy = ac[*p].size.y * scale;
             xDtex = ac[*p].size.x / (float)512;
             yDtex = ac[*p].size.y / (float)512;
         }    
         auto ch = ac[*p];
-        float xPos = x + ch.bearing.x;
-        float yPos = y - (ch.size.y - ch.bearing.y);
+        float xPos = x + ch.bearing.x * scale;
+        float yPos = y - (ch.size.y - ch.bearing.y) * scale;
 
         // float vertices[6][4] = {
         //     {xPos,       y,       tx + xDtex,  ty + yDtex}, // 0
@@ -420,7 +420,7 @@ void renderText(const Shader& shader, const char* text, float x, float y, bool i
         // render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        x += (ac[*p].advance >> 6);
+        x += (ac[*p].advance >> 6) * scale;
     }
 }
 

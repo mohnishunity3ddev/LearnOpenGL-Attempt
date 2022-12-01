@@ -27,6 +27,7 @@ public:
 
     Texture(const char *textureName, bool flipImage = true, bool gamma = false, bool textureShouldWrap = true);
     static unsigned int TextureFromFile(const char* path, const std::string &directory, bool gamma = false);
+    static void save_image(const char* filename, int w, int h, int channels_num, unsigned char* pixels);
     Texture(unsigned int screenWidth, unsigned int screen);
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;

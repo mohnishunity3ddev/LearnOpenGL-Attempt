@@ -33,4 +33,4 @@ add_library(SharedUtils ${SRC_FILES} ${HEADER_FILES})
 set_property(TARGET SharedUtils PROPERTY CXX_STANDARD 20)
 set_property(TARGET SharedUtils PROPERTY CXX_STANDARD_REQUIRED ON)
 
-target_link_libraries(SharedUtils PUBLIC opengl32 glad)
+target_link_libraries(SharedUtils PUBLIC opengl32 glad ${freetype})

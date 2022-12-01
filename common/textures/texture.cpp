@@ -5,6 +5,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 #include <iostream>
 
 Texture::Texture(
@@ -224,4 +227,29 @@ void Texture::createDefaultTexture(unsigned int width, unsigned int height, GLin
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
+void Texture::save_image(const char* filename, int w, int h, int channels_num, unsigned char* pixels) {
+
+    std::string path(texture_dir_path);
+    path.append("_testImages/");
+    path.append(filename);
+
+    if(channels_num != 4) {
+        path.append(".jpg");
+        std::cout << "Writing image at path - " << path << "\n";
+        stbi_write_jpg(path.c_str(), w, h, channels_num, pixels, w * channels_num);
+    }
+    else if(channels_num == 4) {
+        path.append(".png");
+        std::cout << "Writing image at path - " << path << "\n";
+        stbi_write_png(path.c_str(), w, h, channels_num, pixels, w * channels_num);
+    }
+
+    const char* fail_reason = stbi_failure_reason();
+
+    if(fail_reason) {
+        std::cout << "Error to write image at path " << path << ". Fail Reason: " << fail_reason << "\n";
+        stbi__err(0, 0);
+    }
 }

@@ -171,3 +171,4 @@ add_subdirectory(src/Chapter05/5.5.2.normal_mapping_tangent_space)
 
 add_subdirectory(src/Chapter07/7.1.0.text_rendering)
 add_subdirectory(src/Chapter07/7.1.1.text_rendering_atlas)
+add_subdirectory(src/Chapter07/7.1.2.text_rendering_SDF)

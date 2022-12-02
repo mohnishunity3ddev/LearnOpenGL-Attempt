@@ -67,6 +67,13 @@ else()
   message("freetype - found at path ${freetype}")
 endif()
 
+# MSDF stuff
+# set(MSDFGEN_CORE_ONLY         ON  CACHE BOOL "")
+# set(MSDFGEN_BUILD_STANDALONE  ON  CACHE BOOL "" )
+# set(MSDFGEN_USE_VCPKG         OFF CACHE BOOL "" )
+# set(MSDFGEN_USE_CPP11         ON  CACHE BOOL "" )
+# add_subdirectory(external/msdfgen)
+
 # Include Directories ...
 include_directories(external/glfw/include)
 include_directories(external/glm)
@@ -76,6 +83,7 @@ include_directories(external/assimp/include)
 include_directories($<TARGET_FILE_DIR:assimp>/../include) # there is one config.h file which gets build in assimp's build directory by cmake.
 include_directories(external/imgui)
 include_directories(external/freetype2/include)
+include_directories(external/msdfgen)
 include_directories(common)
 
 if(WIN32)
@@ -84,6 +92,7 @@ endif()
 set_property(TARGET glfw            PROPERTY FOLDER "ThirdPartyLibraries")
 set_property(TARGET glad            PROPERTY FOLDER "ThirdPartyLibraries")
 set_property(TARGET assimp          PROPERTY FOLDER "ThirdPartyLibraries")
+# set_property(TARGET msdfgen-core    PROPERTY FOLDER "ThirdPartyLibraries")
 
 
 # Include Common SharedUtils
@@ -172,3 +181,4 @@ add_subdirectory(src/Chapter05/5.5.2.normal_mapping_tangent_space)
 add_subdirectory(src/Chapter07/7.1.0.text_rendering)
 add_subdirectory(src/Chapter07/7.1.1.text_rendering_atlas)
 add_subdirectory(src/Chapter07/7.1.2.text_rendering_SDF)
+add_subdirectory(src/Chapter07/7.1.3.text_rendering_MultiChannelSDF)

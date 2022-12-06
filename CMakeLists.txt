@@ -67,7 +67,7 @@ else()
   message("freetype - found at path ${freetype}")
 endif()
 
-# MSDF stuff
+#### MSDF stuff
 # set(MSDFGEN_CORE_ONLY         ON  CACHE BOOL "")
 # set(MSDFGEN_BUILD_STANDALONE  ON  CACHE BOOL "" )
 # set(MSDFGEN_USE_VCPKG         OFF CACHE BOOL "" )
@@ -83,7 +83,7 @@ include_directories(external/assimp/include)
 include_directories($<TARGET_FILE_DIR:assimp>/../include) # there is one config.h file which gets build in assimp's build directory by cmake.
 include_directories(external/imgui)
 include_directories(external/freetype2/include)
-include_directories(external/msdfgen)
+# include_directories(external/msdfgen)
 include_directories(common)
 
 if(WIN32)
